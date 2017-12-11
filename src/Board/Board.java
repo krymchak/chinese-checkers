@@ -6,7 +6,8 @@ public class Board extends AbstractBoard
 	 * TODO add Factory Method for create Checker
 	 */
 	/*
-	 * Wypelniamy pierwszy trojkat 
+	 * Fill first triangle. If IsChecker = true, fill fiels without checkers, else add checkers
+         * @ IsChecker
 	 */
 	public void fillFirstTriangle (boolean IsChecker)
 	{
@@ -14,21 +15,18 @@ public class Board extends AbstractBoard
 		{
 			for (int j=4; j<4+i+1; j++)
 			{
+                            	board[i][j]=new NotEmptyField();
 				if (IsChecker==true)
 				{
-					board[i][j]=new NotEmptyField();
 					board[i][j].setChecker(new Checker());
-				}
-				else
-				{
-					board[i][j]=new NotEmptyField();
 				}
 			}
 		}
 	}
 	
 	/*
-	 * Wypelniamy drugi trojkat
+	 * Fill second triangle. If IsChecker = true, fill fiels without checkers, else add checkers
+         * @ IsChecker
 	 */
 	public void fillSecondTriangle (boolean IsChecker)
 	{
@@ -36,22 +34,18 @@ public class Board extends AbstractBoard
 		{
 			for (int j=9+i-4; j<13; j++)
 			{
+                            	board[i][j]=new NotEmptyField();
 				if (IsChecker==true)
 				{
-					board[i][j]=new NotEmptyField();
 					board[i][j].setChecker(new Checker());
-				}
-				else
-				{
-					board[i][j]=new NotEmptyField();
-					board[i][j]=new NotEmptyField();
 				}
 			}
 		}
 	}
 	
 	/*
-	 * Wypelniamy trzeci trojkat
+	 * Fill third triangle. If IsChecker = true, fill fiels without checkers, else add checkers
+         * @ IsChecker
 	 */
 	public void fillThirdTriangle (boolean IsChecker)
 	{
@@ -59,22 +53,18 @@ public class Board extends AbstractBoard
 		{
 			for (int j=13; j<13+i+1-9; j++)
 			{
+                            	board[i][j]=new NotEmptyField();
 				if (IsChecker==true)
 				{
-					board[i][j]=new NotEmptyField();
 					board[i][j].setChecker(new Checker());
-				}
-				else
-				{
-					board[i][j]=new NotEmptyField();
-					board[i][j]=new NotEmptyField();
 				}
 			}
 		}
 	}
 	
 	/*
-	 * Wypelniamy czwarty trojkat
+	 * Fill fourth triangle. If IsChecker = true, fill fiels without checkers, else add checkers
+         * @ IsChecker
 	 */
 	public void fillFourthTriangle (boolean IsChecker)
 	{
@@ -82,22 +72,18 @@ public class Board extends AbstractBoard
 		{
 			for (int j=i-4; j<13; j++)
 			{
+                            	board[i][j]=new NotEmptyField();
 				if (IsChecker==true)
 				{
-					board[i][j]=new NotEmptyField();
 					board[i][j].setChecker(new Checker());
-				}
-				else
-				{
-					board[i][j]=new NotEmptyField();
-					board[i][j]=new NotEmptyField();
 				}
 			}
 		}
 	}
 	
 	/*
-	 * Wypelniamy piaty trojkat
+	 * Fill fifth triangle. If IsChecker = true, fill fiels without checkers, else add checkers
+         * @ IsChecker
 	 */
 	public void fillFifthTriangle (boolean IsChecker)
 	{
@@ -105,22 +91,18 @@ public class Board extends AbstractBoard
 		{
 			for (int j=4; j<4+i+1-9; j++)
 			{
+                            	board[i][j]=new NotEmptyField();
 				if (IsChecker==true)
 				{
-					board[i][j]=new NotEmptyField();
 					board[i][j].setChecker(new Checker());
-				}
-				else
-				{
-					board[i][j]=new NotEmptyField();
-					board[i][j]=new NotEmptyField();
 				}
 			}
 		}
 	}
 	
 	/*
-	 * Wypelniamy szosty trojkat
+	 * Fill sixth triangle. If IsChecker = true, fill fiels without checkers, else add checkers
+         * @ IsChecker
 	 */
 	public void fillSixthTriangle (boolean IsChecker)
 	{
@@ -128,14 +110,10 @@ public class Board extends AbstractBoard
 		{
 			for (int j=i-4; j<4; j++)
 			{
+                            	board[i][j]=new NotEmptyField();
 				if (IsChecker==true)
 				{
-					board[i][j]=new NotEmptyField();
 					board[i][j].setChecker(new Checker());
-				}
-				else
-				{
-					board[i][j]=new NotEmptyField();
 				}
 			}
 		}
@@ -148,17 +126,17 @@ public class Board extends AbstractBoard
 	public Board (int numberOfPlayers)
 	{
 		board=new Field[17][17];
-		/*
-		 * Wypelniamy cala tabele pustymi elementami
-		 */
+                /*
+                * Fill the table with empty fields
+                */
 		for (int i=0; i<17; i++)
 		{
 			for (int j=0; j<17; j++)
 				board[i][j]=new EmptyField();
 		}
-		/*
-		 * Wypelniamy srodek tabeli polami do chodzenia
-		 */
+                /*
+                * Fill the table with not empty fields
+                */
 		for (int i=4; i<13; i++)
 		{
 			for (int j=4; j<13; j++)
@@ -243,7 +221,7 @@ public class Board extends AbstractBoard
 	}
 	public static void main(String args[]) 
 	{
-		Board a = new Board(6);
+		Board a = new Board(4);
 		a.write();
 	}
 }
