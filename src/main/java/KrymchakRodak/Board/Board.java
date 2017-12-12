@@ -9,16 +9,16 @@ public class Board extends AbstractBoard
 	 * Fill first triangle. If IsChecker = true, fill fiels without checkers, else add checkers
          * @ IsChecker
 	 */
-	public void fillFirstTriangle (boolean IsChecker)
+	public void fillFirstTriangle (String checker)
 	{
 		for (int i=0; i<4; i++)
 		{
 			for (int j=4; j<4+i+1; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (IsChecker==true)
+				if (checker!=null)
 				{
-					board[i][j].setChecker(new Checker());
+					board[i][j].setChecker(new Checker(checker));
 				}
 			}
 		}
@@ -28,16 +28,16 @@ public class Board extends AbstractBoard
 	 * Fill second triangle. If IsChecker = true, fill fiels without checkers, else add checkers
          * @ IsChecker
 	 */
-	public void fillSecondTriangle (boolean IsChecker)
+	public void fillSecondTriangle (String checker)
 	{
 		for (int i=4; i<8; i++)
 		{
 			for (int j=9+i-4; j<13; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (IsChecker==true)
+				if (checker!=null)
 				{
-					board[i][j].setChecker(new Checker());
+					board[i][j].setChecker(new Checker(checker));
 				}
 			}
 		}
@@ -47,16 +47,16 @@ public class Board extends AbstractBoard
 	 * Fill third triangle. If IsChecker = true, fill fiels without checkers, else add checkers
          * @ IsChecker
 	 */
-	public void fillThirdTriangle (boolean IsChecker)
+	public void fillThirdTriangle (String checker)
 	{
 		for (int i=9; i<13; i++)
 		{
 			for (int j=13; j<13+i+1-9; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (IsChecker==true)
+				if (checker!=null)
 				{
-					board[i][j].setChecker(new Checker());
+					board[i][j].setChecker(new Checker(checker));
 				}
 			}
 		}
@@ -66,16 +66,16 @@ public class Board extends AbstractBoard
 	 * Fill fourth triangle. If IsChecker = true, fill fiels without checkers, else add checkers
          * @ IsChecker
 	 */
-	public void fillFourthTriangle (boolean IsChecker)
+	public void fillFourthTriangle (String checker)
 	{
 		for (int i=13; i<17; i++)
 		{
 			for (int j=i-4; j<13; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (IsChecker==true)
+				if (checker!=null)
 				{
-					board[i][j].setChecker(new Checker());
+					board[i][j].setChecker(new Checker(checker));
 				}
 			}
 		}
@@ -85,16 +85,16 @@ public class Board extends AbstractBoard
 	 * Fill fifth triangle. If IsChecker = true, fill fiels without checkers, else add checkers
          * @ IsChecker
 	 */
-	public void fillFifthTriangle (boolean IsChecker)
+	public void fillFifthTriangle (String checker)
 	{
 		for (int i=9; i<13; i++)
 		{
 			for (int j=4; j<4+i+1-9; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (IsChecker==true)
+				if (checker!=null)
 				{
-					board[i][j].setChecker(new Checker());
+					board[i][j].setChecker(new Checker(checker));
 				}
 			}
 		}
@@ -104,16 +104,16 @@ public class Board extends AbstractBoard
 	 * Fill sixth triangle. If IsChecker = true, fill fiels without checkers, else add checkers
          * @ IsChecker
 	 */
-	public void fillSixthTriangle (boolean IsChecker)
+	public void fillSixthTriangle (String checker)
 	{
 		for (int i=4; i<8; i++)
 		{
 			for (int j=i-4; j<4; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (IsChecker==true)
+				if (checker!=null)
 				{
-					board[i][j].setChecker(new Checker());
+					board[i][j].setChecker(new Checker(checker));
 				}
 			}
 		}
@@ -142,58 +142,55 @@ public class Board extends AbstractBoard
 			for (int j=4; j<13; j++)
 				board[i][j]=new NotEmptyField();
 		}
-		/*
-		 * Jesli graczej jest 2, to wypelniamy pionami 1 i 4 trojkaty, pozostale wypelniamy pustymi polami
-		 */
-		if (numberOfPlayers==2)
-		{
-			fillFirstTriangle(true);
-			fillSecondTriangle(false);
-			fillThirdTriangle(false);
-			fillFourthTriangle(true);
-			fillFifthTriangle(false);
-			fillSixthTriangle(false);
-		}
-		/*
-		 * Jesli graczej jest 3, to wypelniamy pionami 2, 4, 6 trojkaty, pozostale wypelniamy pustymi polami
-		 */
-		else if (numberOfPlayers==3)
-		{
-			fillFirstTriangle(false);
-			fillSecondTriangle(true);
-			fillThirdTriangle(false);
-			fillFourthTriangle(true);
-			fillFifthTriangle(false);
-			fillSixthTriangle(true);
-		}
-		/*
-		 * Jesli graczej jest 4, to wypelniamy pionami 2,3, 5, 6 trojkaty, pozostale wypelniamy pustymi polami
-		 */
-		else if (numberOfPlayers==4)
-		{
-			fillFirstTriangle(false);
-			fillSecondTriangle(true);
-			fillThirdTriangle(true);
-			fillFourthTriangle(false);
-			fillFifthTriangle(true);
-			fillSixthTriangle(true);
-		}
-		/*
-		 * Jesli graczej jest 6, to wypelniamy pionami wszystkie trojkaty
-		 */
-		else if (numberOfPlayers==6)
-		{
-			fillFirstTriangle(true);
-			fillSecondTriangle(true);
-			fillThirdTriangle(true);
-			fillFourthTriangle(true);
-			fillFifthTriangle(true);
-			fillSixthTriangle(true);
-		}
-		else
-		{
-			System.out.print("Niepoprawna liczba graczy");
-		}
+            /*
+             * Jesli graczej jest 2, to wypelniamy pionami 1 i 4 trojkaty, pozostale wypelniamy pustymi polami
+             */
+            switch (numberOfPlayers) {
+            /*
+             * Jesli graczej jest 3, to wypelniamy pionami 2, 4, 6 trojkaty, pozostale wypelniamy pustymi polami
+             */
+                case 2:
+                    fillFirstTriangle("O");
+                    fillSecondTriangle(null);
+                    fillThirdTriangle(null);
+                    fillFourthTriangle("R");
+                    fillFifthTriangle(null);
+                    fillSixthTriangle(null);
+                    break;
+            /*
+             * Jesli graczej jest 4, to wypelniamy pionami 2,3, 5, 6 trojkaty, pozostale wypelniamy pustymi polami
+             */
+                case 3:
+                    fillFirstTriangle(null);
+                    fillSecondTriangle("O");
+                    fillThirdTriangle(null);
+                    fillFourthTriangle("R");
+                    fillFifthTriangle(null);
+                    fillSixthTriangle("B");
+                    break;
+            /*
+             * Jesli graczej jest 6, to wypelniamy pionami wszystkie trojkaty
+             */
+                case 4:
+                    fillFirstTriangle(null);
+                    fillSecondTriangle("O");
+                    fillThirdTriangle("R");
+                    fillFourthTriangle(null);
+                    fillFifthTriangle("B");
+                    fillSixthTriangle("G");
+                    break;
+                case 6:
+                    fillFirstTriangle("O");
+                    fillSecondTriangle("R");
+                    fillThirdTriangle("B");
+                    fillFourthTriangle("G");
+                    fillFifthTriangle("Y");
+                    fillSixthTriangle("P");
+                    break;
+                default:
+                    System.out.print("Niepoprawna liczba graczy");
+                    break;
+            }
 	}
 	
 	public void write ()
@@ -212,7 +209,7 @@ public class Board extends AbstractBoard
 						System.out.print(".");
 					else
 					{
-						System.out.print("*");
+						System.out.print(board[i][j].getChecker().getColor());
 					}
 				}
 			}
@@ -221,7 +218,7 @@ public class Board extends AbstractBoard
 	}
 	public static void main(String args[]) 
 	{
-		Board a = new Board(4);
+		Board a = new Board(2);
 		a.write();
 	}
 }

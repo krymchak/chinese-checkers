@@ -13,6 +13,11 @@ public class NotEmptyField extends Field
 	{
 		this.checker=checker;
 	}
+        
+        public Checker getChecker ()
+        {
+            return checker;
+        }
 	public boolean IsChecker ()
 	{
 		if (checker!=null)

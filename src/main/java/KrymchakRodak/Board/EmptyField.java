@@ -14,6 +14,11 @@ public class EmptyField extends Field
 	public void setChecker (Checker checker)
 	{
 	}
+        
+        public Checker getChecker()
+        {
+            return null;
+        }
 	
 	public boolean IsChecker ()
 	{
