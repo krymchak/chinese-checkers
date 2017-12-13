@@ -1,5 +1,9 @@
 package KrymchakRodak.Board;
 
+/**
+ *
+ * @author Krymchak Veranika
+ */
 public class NotEmptyField extends Field
 {
 	Checker checker = null;

@@ -7,7 +7,7 @@ package KrymchakRodak.Board;
 
 /**
  *
- * @author krmwe
+ * @author Krymchak Veranika
  */
 public abstract class AbstractCreatorChecker 
 {

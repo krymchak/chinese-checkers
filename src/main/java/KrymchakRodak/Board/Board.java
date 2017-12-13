@@ -1,5 +1,8 @@
 package KrymchakRodak.Board;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Board extends AbstractBoard
 {
     /*
@@ -9,43 +12,25 @@ public class Board extends AbstractBoard
     * Call the constructor from AbstractBoard
     * @ numberOfPlayers 
     */
-    public Board(int numberOfPlayers) {
+    public Board(int numberOfPlayers) throws WrongNumberOfPlayers{
         super(numberOfPlayers);
     }
     
     @Override
-    
    /*
     * Fill the array according to the number of players
      * @ numberOfPlayers 
     */
-    public void FillBoard (int numberOfPlayers)
+    protected void FillBoard (int numberOfPlayers)
     {
-        board=new Field[17][17];
-                /*
-                * Fill the array with empty fields
-                */
-		for (int i=0; i<17; i++)
-		{
-			for (int j=0; j<17; j++)
-				board[i][j]=new EmptyField();
-		}
-                /*
-                * Fill the center of array with not empty fields
-                */
-		for (int i=4; i<13; i++)
-		{
-			for (int j=4; j<13; j++)
-				board[i][j]=new NotEmptyField();
-		}
-            /*
-             * If numberOfPlayers 2, tneh fill 1 i 4 triangle with checker, rest fill with NotEmpty fields
-             */
+            board=new Field[17][17];
             switch (numberOfPlayers) {
-            /*
-             * If numberOfPlayers 3, tneh fill 2,4,6 triangle with checker, rest fill with NotEmpty fields
-             */
+                /*
+                * If numberOfPlayers 2, tneh fill 1 i 4 triangle with checker, rest fill with NotEmpty fields
+                */
                 case 2:
+                    fillWithEmpty();
+                    fillCenter();
                     fillFirstTriangle("O");
                     fillSecondTriangle(null);
                     fillThirdTriangle(null);
@@ -53,10 +38,12 @@ public class Board extends AbstractBoard
                     fillFifthTriangle(null);
                     fillSixthTriangle(null);
                     break;
-            /*
-             * If numberOfPlayers 4, tneh fill 2, 3, 5, 6 triangle with checker, rest fill with NotEmpty fields
-             */
+                /*
+                 * If numberOfPlayers 3, tneh fill 2,4,6 triangle with checker, rest fill with NotEmpty fields
+                 */
                 case 3:
+                    fillWithEmpty();
+                    fillCenter();
                     fillFirstTriangle(null);
                     fillSecondTriangle("O");
                     fillThirdTriangle(null);
@@ -64,10 +51,12 @@ public class Board extends AbstractBoard
                     fillFifthTriangle(null);
                     fillSixthTriangle("B");
                     break;
-            /*
-             * If numberOfPlayers 6, tneh fill all triangle with checker, rest fill with NotEmpty fields
-             */
+                /*
+                * If numberOfPlayers 4, tneh fill 2, 3, 5, 6 triangle with checker, rest fill with NotEmpty fields
+                */
                 case 4:
+                    fillWithEmpty();
+                    fillCenter();
                     fillFirstTriangle(null);
                     fillSecondTriangle("O");
                     fillThirdTriangle("R");
@@ -75,7 +64,12 @@ public class Board extends AbstractBoard
                     fillFifthTriangle("B");
                     fillSixthTriangle("G");
                     break;
+                /*
+                 * If numberOfPlayers 6, tneh fill all triangle with checker, rest fill with NotEmpty fields
+                 */
                 case 6:
+                    fillWithEmpty();
+                    fillCenter();
                     fillFirstTriangle("O");
                     fillSecondTriangle("R");
                     fillThirdTriangle("B");
@@ -83,11 +77,31 @@ public class Board extends AbstractBoard
                     fillFifthTriangle("Y");
                     fillSixthTriangle("P");
                     break;
-                default:
-                    System.out.print("Niepoprawna liczba graczy");
-                    break;
             }
     }
+        /*
+        * Fill the array with empty fields
+        */
+        public void fillWithEmpty ()
+        {
+            for (int i=0; i<17; i++)
+		{
+			for (int j=0; j<17; j++)
+				board[i][j]=new EmptyField();
+		}
+        }
+        
+        /*
+        * Fill the center of array with not empty fields
+        */
+        public void fillCenter ()
+        {
+            for (int i=4; i<13; i++)
+            {
+                for (int j=4; j<13; j++)
+                    board[i][j]=new NotEmptyField();
+            }
+        }
 	/*
 	 * Fill first triangle. If checker empty,  fill fiels without checkers, else add checkers
          * @ checker which color have checker
@@ -205,32 +219,42 @@ public class Board extends AbstractBoard
 	/*
         * write array
         */
-	public void write ()
+	public String write ()
 	{
+            String result="";
 		for (int i=0; i<17; i++)
 		{
 			for (int j=0; j<17; j++)
 			{
 				if (board[i][j].IsNotEmpty()==false)
 				{
-					System.out.print(" ");
+                                        result=result+" ";
 				}
 				else
 				{
 					if (board[i][j].IsChecker()==false)
-						System.out.print(".");
+                                        {
+                                                result=result+".";
+                                        }
 					else
 					{
-						System.out.print(board[i][j].getChecker().getColor());
+                                                result=result+board[i][j].getChecker().getColor();
 					}
 				}
 			}
-			System.out.println("");
+                        result=result+"\n";
 		}
+                return result;
 	}
+        
 	public static void main(String args[]) 
 	{
-		Board a = new Board(4);
-		a.write();
+        try {
+            Board a = new Board(0);
+            a.fillFirstTriangle("O");
+            System.out.print(a.write());
+        } catch (WrongNumberOfPlayers ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        }
 	}
 }

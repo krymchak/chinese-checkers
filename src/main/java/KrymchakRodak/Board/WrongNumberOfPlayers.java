@@ -9,14 +9,6 @@ package KrymchakRodak.Board;
  *
  * @author Krymchak Veranika
  */
-public class CreatorChecker extends AbstractCreatorChecker
-{
-    /*
-    * Creare new Checker with given color
-    */
-    @Override
-    public Checker createChecker(String color)
-    {
-        return new Checker(color);
-    }
+public class WrongNumberOfPlayers extends Exception {
+    
 }

@@ -1,5 +1,9 @@
 package KrymchakRodak.Board;
 
+/**
+ *
+ * @author Krymchak Veranika
+ */
 public class Checker extends AbstractChecker
 {
     String color=null;
