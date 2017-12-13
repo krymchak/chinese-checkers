@@ -20,8 +20,8 @@ public class EmptyField extends Field
             return null;
         }
 	
-	public boolean IsChecker ()
+	public boolean isChecker ()
 	{
-			return false;
+            return false;
 	}
 }

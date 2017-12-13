@@ -5,11 +5,13 @@
  */
 package KrymchakRodak.Board;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Krymchak Veranika
  */
 public abstract class AbstractCreatorChecker 
 {
-    public abstract AbstractChecker createChecker(String color);    
+    public abstract AbstractChecker createChecker(String color, ArrayList <Field> listOfNeighbors);    
 }

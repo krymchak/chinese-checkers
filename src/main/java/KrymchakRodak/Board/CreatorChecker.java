@@ -5,6 +5,8 @@
  */
 package KrymchakRodak.Board;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Krymchak Veranika
@@ -15,8 +17,8 @@ public class CreatorChecker extends AbstractCreatorChecker
     * Creare new Checker with given color
     */
     @Override
-    public Checker createChecker(String color)
+    public Checker createChecker(String color, ArrayList <Field> listOfNeighbors)
     {
-        return new Checker(color);
+        return new Checker(color, listOfNeighbors);
     }
 }

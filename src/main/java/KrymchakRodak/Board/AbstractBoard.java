@@ -1,5 +1,7 @@
 package KrymchakRodak.Board;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Krymchak Veranika
@@ -22,6 +24,6 @@ public abstract class AbstractBoard
                 throw new WrongNumberOfPlayers();
             }
         }
-	
+	public abstract ArrayList<Field> createListOfNeighbors(int i, int j);
 }
 

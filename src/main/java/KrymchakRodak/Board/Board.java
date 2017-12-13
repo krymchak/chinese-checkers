@@ -1,5 +1,7 @@
 package KrymchakRodak.Board;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -115,7 +117,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker));
+					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -134,7 +136,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker));
+					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -153,7 +155,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker));
+					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -172,7 +174,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker));
+					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -191,7 +193,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker));
+					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -210,7 +212,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker));
+					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -232,7 +234,7 @@ public class Board extends AbstractBoard
 				}
 				else
 				{
-					if (board[i][j].IsChecker()==false)
+					if (board[i][j].isChecker()==false)
                                         {
                                                 result=result+".";
                                         }
@@ -247,11 +249,67 @@ public class Board extends AbstractBoard
                 return result;
 	}
         
+    @Override
+    public ArrayList<Field> createListOfNeighbors(int i, int j)
+    {
+        ArrayList<Field> ListOfNeighbors=new ArrayList<Field>();
+        if (i>0 && !board[i-1][j].isChecker())
+        {
+            ListOfNeighbors.add(board[i-1][j]);
+        }
+        else if (i>1 && !board[i-2][j].isChecker())
+        {
+            ListOfNeighbors.add(board[i-2][j]);
+        }
+        if (i>0 && !board[i-1][j-1].isChecker())
+        {
+            ListOfNeighbors.add(board[i-1][j-1]);
+        }
+        else if (i>1 && !board[i-2][j-2].isChecker())
+        {
+            ListOfNeighbors.add(board[i-2][j-2]);
+        }
+        if (!board[i][j-1].isChecker())
+        {
+            ListOfNeighbors.add(board[i][j-1]);
+        }
+        else if (!board[i][j-2].isChecker())
+        {
+            ListOfNeighbors.add(board[i][j-2]);
+        }
+        if (i<16 && !board[i+1][j].isChecker())
+        {
+            ListOfNeighbors.add(board[i+1][j]);
+        }
+        else if (i<15 && !board[i+2][j].isChecker())
+        {
+            ListOfNeighbors.add(board[i+2][j]);
+
+        }
+        if (i< 16 && !board[i+1][j+1].isChecker())
+        {
+            ListOfNeighbors.add(board[i+1][j+1]);
+        }
+        else if (i<15 && !board[i+2][j+2].isChecker())
+        {
+            ListOfNeighbors.add(board[i+2][j+2]);
+
+        }
+        if (!board[i][j+1].isChecker())
+        {
+            ListOfNeighbors.add(board[i][j+1]);
+        }
+        else if (!board[i][j+2].isChecker())
+        {
+            ListOfNeighbors.add(board[i][j+2]);
+        }
+        return ListOfNeighbors;
+    }
+        
 	public static void main(String args[]) 
 	{
         try {
-            Board a = new Board(0);
-            a.fillFirstTriangle("O");
+            Board a = new Board(2);
             System.out.print(a.write());
         } catch (WrongNumberOfPlayers ex) {
             Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);

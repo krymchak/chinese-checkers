@@ -22,7 +22,7 @@ public class NotEmptyField extends Field
         {
             return checker;
         }
-	public boolean IsChecker ()
+	public boolean isChecker ()
 	{
 		if (checker!=null)
 			return true;
