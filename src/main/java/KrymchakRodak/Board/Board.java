@@ -261,19 +261,19 @@ public class Board extends AbstractBoard
         {
             ListOfNeighbors.add(board[i-2][j]);
         }
-        if (i>0 && !board[i-1][j-1].isChecker())
+        if (i>0 && j>0 && !board[i-1][j-1].isChecker())
         {
             ListOfNeighbors.add(board[i-1][j-1]);
         }
-        else if (i>1 && !board[i-2][j-2].isChecker())
+        else if (i>1 && j>2 && !board[i-2][j-2].isChecker())
         {
             ListOfNeighbors.add(board[i-2][j-2]);
         }
-        if (!board[i][j-1].isChecker())
+        if (j>0 && !board[i][j-1].isChecker())
         {
             ListOfNeighbors.add(board[i][j-1]);
         }
-        else if (!board[i][j-2].isChecker())
+        else if (j>1 && !board[i][j-2].isChecker())
         {
             ListOfNeighbors.add(board[i][j-2]);
         }
@@ -286,20 +286,20 @@ public class Board extends AbstractBoard
             ListOfNeighbors.add(board[i+2][j]);
 
         }
-        if (i< 16 && !board[i+1][j+1].isChecker())
+        if (i< 16 && j<16 && !board[i+1][j+1].isChecker())
         {
             ListOfNeighbors.add(board[i+1][j+1]);
         }
-        else if (i<15 && !board[i+2][j+2].isChecker())
+        else if (i<15 && j<15 &&!board[i+2][j+2].isChecker())
         {
             ListOfNeighbors.add(board[i+2][j+2]);
 
         }
-        if (!board[i][j+1].isChecker())
+        if (j<16 && !board[i][j+1].isChecker())
         {
             ListOfNeighbors.add(board[i][j+1]);
         }
-        else if (!board[i][j+2].isChecker())
+        else if (j<15 && !board[i][j+2].isChecker())
         {
             ListOfNeighbors.add(board[i][j+2]);
         }
@@ -309,7 +309,7 @@ public class Board extends AbstractBoard
 	public static void main(String args[]) 
 	{
         try {
-            Board a = new Board(2);
+            Board a = new Board(6);
             System.out.print(a.write());
         } catch (WrongNumberOfPlayers ex) {
             Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
