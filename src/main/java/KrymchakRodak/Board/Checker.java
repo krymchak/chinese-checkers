@@ -20,6 +20,28 @@ public class Checker extends AbstractChecker
         this.listOfNeighbors=listOfNeighbors;
     }
     
+    
+    /*
+    * Check if the move in given field is possible 
+    */
+    public boolean isPossibleStep (Field targetField)
+    {
+       for (int i=0; i<listOfNeighbors.size(); i++)
+       {
+           if (listOfNeighbors.get(i)==targetField)
+                return true;
+       }
+       return false;
+    }
+    
+    /*
+    * Change list of neighbors
+    */
+    public void changelistOfNeighbors (ArrayList<Field> listOfNeighbors)
+    {
+        this.listOfNeighbors=listOfNeighbors;
+    }
+    
     /*
     * @return color of Checker
     */

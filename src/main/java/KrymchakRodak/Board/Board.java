@@ -1,7 +1,6 @@
 package KrymchakRodak.Board;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -249,6 +248,11 @@ public class Board extends AbstractBoard
                 return result;
 	}
         
+    /*
+    * Create list of neighbors for given field of board. Check all possibilities and add it in list
+    * @param i, j - coordinates of field
+    * @return list of neighbors
+    */
     @Override
     public ArrayList<Field> createListOfNeighbors(int i, int j)
     {
@@ -305,11 +309,45 @@ public class Board extends AbstractBoard
         }
         return ListOfNeighbors;
     }
+    
+    
+    /*
+    * TODO add exception, if not checker and if not possible step
+    */
+    /*
+    * If the first field contains a checker and in his list of neighbors is contained second field,
+    * move checker in second field, create new list of neighbors for checker and delete checker from first field.
+    * @param i1, j1 - coordinates of first field
+    * @param i2, j3 - coordinates of second field
+    */
+    @Override
+    public void  Step (int i1, int j1, int i2, int j2) 
+    {
+        if (board[i1][j1].isChecker())
+        {
+            if (board[i1][j1].getChecker().isPossibleStep(board[i2][j2]))
+            {
+                board[i2][j2].setChecker(board[i1][j1].getChecker());
+                board[i2][j2].getChecker().changelistOfNeighbors(createListOfNeighbors(i2, j2));
+                board[i1][j1].setChecker(null);
+            }
+            else
+            {
+                System.out.print("1");
+            }
+        }
+        else
+        {
+            System.out.print("2");
+        }
+    }
         
 	public static void main(String args[]) 
 	{
         try {
             Board a = new Board(6);
+            a.Step(4, 3, 4, 4);
+             a.Step(4, 4, 4, 5);
             System.out.print(a.write());
         } catch (WrongNumberOfPlayers ex) {
             Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
