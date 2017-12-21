@@ -83,10 +83,10 @@ public class BoardTest {
     "  PP.......RR    \n" +
     "   P........R    \n" +
     "    .........    \n" +
-    "    Y........B   \n" +
-    "    YY.......BB  \n" +
-    "    YYY......BBB \n" +
-    "    YYYY.....BBBB\n" +
+    "    C........B   \n" +
+    "    CC.......BB  \n" +
+    "    CCC......BBB \n" +
+    "    CCCC.....BBBB\n" +
     "         GGGG    \n" +
     "          GGG    \n" +
     "           GG    \n" +

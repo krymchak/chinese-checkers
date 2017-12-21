@@ -1,5 +1,6 @@
 package KrymchakRodak.Board;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 public class Checker
 {
     ArrayList<Field> listOfNeighbors;
-    String color=null;
+    Color color=null;
     
     /*
     * Create Checker with given color and given list of neighbors
     */
-    public Checker (String color, ArrayList<Field> listOfNeighbors)
+    public Checker (Color color, ArrayList<Field> listOfNeighbors)
     {
         this.color=color;
         this.listOfNeighbors=listOfNeighbors;
@@ -45,7 +46,7 @@ public class Checker
     /*
     * @return color of Checker
     */
-    public String getColor ()
+    public Color getColor ()
     {
         return color;
     }

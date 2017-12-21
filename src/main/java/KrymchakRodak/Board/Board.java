@@ -1,5 +1,6 @@
 package KrymchakRodak.Board;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,10 +33,10 @@ public class Board extends AbstractBoard
                 case 2:
                     fillWithEmpty();
                     fillCenter();
-                    fillFirstTriangle("O");
+                    fillFirstTriangle(Color.ORANGE);
                     fillSecondTriangle(null);
                     fillThirdTriangle(null);
-                    fillFourthTriangle("R");
+                    fillFourthTriangle(Color.RED);
                     fillFifthTriangle(null);
                     fillSixthTriangle(null);
                     break;
@@ -46,11 +47,11 @@ public class Board extends AbstractBoard
                     fillWithEmpty();
                     fillCenter();
                     fillFirstTriangle(null);
-                    fillSecondTriangle("O");
+                    fillSecondTriangle(Color.ORANGE);
                     fillThirdTriangle(null);
-                    fillFourthTriangle("R");
+                    fillFourthTriangle(Color.RED);
                     fillFifthTriangle(null);
-                    fillSixthTriangle("B");
+                    fillSixthTriangle(Color.BLUE);
                     break;
                 /*
                 * If numberOfPlayers 4, tneh fill 2, 3, 5, 6 triangle with checker, rest fill with NotEmpty fields
@@ -59,11 +60,11 @@ public class Board extends AbstractBoard
                     fillWithEmpty();
                     fillCenter();
                     fillFirstTriangle(null);
-                    fillSecondTriangle("O");
-                    fillThirdTriangle("R");
+                    fillSecondTriangle(Color.ORANGE);
+                    fillThirdTriangle(Color.RED);
                     fillFourthTriangle(null);
-                    fillFifthTriangle("B");
-                    fillSixthTriangle("G");
+                    fillFifthTriangle(Color.BLUE);
+                    fillSixthTriangle(Color.GREEN);
                     break;
                 /*
                  * If numberOfPlayers 6, tneh fill all triangle with checker, rest fill with NotEmpty fields
@@ -71,12 +72,12 @@ public class Board extends AbstractBoard
                 case 6:
                     fillWithEmpty();
                     fillCenter();
-                    fillFirstTriangle("O");
-                    fillSecondTriangle("R");
-                    fillThirdTriangle("B");
-                    fillFourthTriangle("G");
-                    fillFifthTriangle("Y");
-                    fillSixthTriangle("P");
+                    fillFirstTriangle(Color.ORANGE);
+                    fillSecondTriangle(Color.RED);
+                    fillThirdTriangle(Color.BLUE);
+                    fillFourthTriangle(Color.GREEN);
+                    fillFifthTriangle(Color.CYAN);
+                    fillSixthTriangle(Color.PINK);
                     break;
             }
     }
@@ -107,16 +108,16 @@ public class Board extends AbstractBoard
 	 * Fill first triangle. If checker empty,  fill fiels without checkers, else add checkers
          * @ checker which color have checker
 	 */
-	public void fillFirstTriangle (String checker)
+	public void fillFirstTriangle (Color color)
 	{
 		for (int i=0; i<4; i++)
 		{
 			for (int j=4; j<4+i+1; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (checker!=null)
+				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -126,16 +127,16 @@ public class Board extends AbstractBoard
 	 * Fill second triangle. If checker empty,  fill fiels without checkers, else add checkers
          * @ checker which color have checker
 	 */
-	public void fillSecondTriangle (String checker)
+	public void fillSecondTriangle (Color color)
 	{
 		for (int i=4; i<8; i++)
 		{
 			for (int j=9+i-4; j<13; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (checker!=null)
+				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -145,16 +146,16 @@ public class Board extends AbstractBoard
 	 * Fill third triangle. If checker empty,  fill fiels without checkers, else add checkers
          * @ checker which color have checker
 	 */
-	public void fillThirdTriangle (String checker)
+	public void fillThirdTriangle (Color color)
 	{
 		for (int i=9; i<13; i++)
 		{
 			for (int j=13; j<13+i+1-9; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (checker!=null)
+				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -164,16 +165,16 @@ public class Board extends AbstractBoard
 	 * Fill fourth triangle. If checker empty,  fill fiels without checkers, else add checkers
          * @ checker which color have checker
 	 */
-	public void fillFourthTriangle (String checker)
+	public void fillFourthTriangle (Color color)
 	{
 		for (int i=13; i<17; i++)
 		{
 			for (int j=i-4; j<13; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (checker!=null)
+				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -183,16 +184,16 @@ public class Board extends AbstractBoard
 	 * Fill fifth triangle. If checker empty, fill fiels without checkers, else add checkers
          * @ checker which color have checker
 	 */
-	public void fillFifthTriangle (String checker)
+	public void fillFifthTriangle (Color color)
 	{
 		for (int i=9; i<13; i++)
 		{
 			for (int j=4; j<4+i+1-9; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (checker!=null)
+				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -202,16 +203,16 @@ public class Board extends AbstractBoard
 	 * Fill sixth triangle. If checker empty, fill fiels without checkers, else add checkers
          * @ checker which color have checker
 	 */
-	public void fillSixthTriangle (String checker)
+	public void fillSixthTriangle (Color color)
 	{
 		for (int i=4; i<8; i++)
 		{
 			for (int j=i-4; j<4; j++)
 			{
                             	board[i][j]=new NotEmptyField();
-				if (checker!=null)
+				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -239,7 +240,30 @@ public class Board extends AbstractBoard
                                         }
 					else
 					{
-                                                result=result+board[i][j].getChecker().getColor();
+                                                if(board[i][j].getChecker().getColor()==Color.ORANGE)
+                                                {
+                                                        result=result+"O";
+                                                }
+                                                if(board[i][j].getChecker().getColor()==Color.RED)
+                                                {
+                                                        result=result+"R";
+                                                }
+                                                if(board[i][j].getChecker().getColor()==Color.BLUE)
+                                                {
+                                                        result=result+"B";
+                                                }
+                                                if(board[i][j].getChecker().getColor()==Color.GREEN)
+                                                {
+                                                        result=result+"G";
+                                                }
+                                                if(board[i][j].getChecker().getColor()==Color.CYAN)
+                                                {
+                                                        result=result+"C";
+                                                }
+                                                if(board[i][j].getChecker().getColor()==Color.PINK)
+                                                {
+                                                        result=result+"P";
+                                                }
 					}
 				}
 			}
@@ -247,7 +271,6 @@ public class Board extends AbstractBoard
 		}
                 return result;
 	}
-   
     /*
     * Create list of neighbors for given field of board. Check all possibilities and add it in list
     * @param i, j - coordinates of field
