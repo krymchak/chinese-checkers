@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *
  * @author Krymchak Veranika
  */
-public class Checker extends AbstractChecker
+public class Checker
 {
     ArrayList<Field> listOfNeighbors;
     String color=null;

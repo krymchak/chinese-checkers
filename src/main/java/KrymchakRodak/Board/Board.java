@@ -116,7 +116,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -135,7 +135,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -154,7 +154,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -173,7 +173,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -192,7 +192,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -211,7 +211,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (checker!=null)
 				{
-					board[i][j].setChecker(new CreatorChecker().createChecker(checker, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(checker, createListOfNeighbors(i, j)));
 				}
 			}
 		}
@@ -247,7 +247,7 @@ public class Board extends AbstractBoard
 		}
                 return result;
 	}
-        
+   
     /*
     * Create list of neighbors for given field of board. Check all possibilities and add it in list
     * @param i, j - coordinates of field
@@ -257,53 +257,53 @@ public class Board extends AbstractBoard
     public ArrayList<Field> createListOfNeighbors(int i, int j)
     {
         ArrayList<Field> ListOfNeighbors=new ArrayList<Field>();
-        if (i>0 && !board[i-1][j].isChecker())
+        if (i>0 && board[i-1][j].IsNotEmpty() &&!board[i-1][j].isChecker())
         {
             ListOfNeighbors.add(board[i-1][j]);
         }
-        else if (i>1 && !board[i-2][j].isChecker())
+        else if (i>1 && board[i-2][j].IsNotEmpty() && !board[i-2][j].isChecker())
         {
             ListOfNeighbors.add(board[i-2][j]);
         }
-        if (i>0 && j>0 && !board[i-1][j-1].isChecker())
+        if (i>0 && j>0 && board[i-1][j-1].IsNotEmpty() && !board[i-1][j-1].isChecker())
         {
             ListOfNeighbors.add(board[i-1][j-1]);
         }
-        else if (i>1 && j>2 && !board[i-2][j-2].isChecker())
+        else if (i>1 && j>2 && board[i-2][j-2].IsNotEmpty() && !board[i-2][j-2].isChecker())
         {
             ListOfNeighbors.add(board[i-2][j-2]);
         }
-        if (j>0 && !board[i][j-1].isChecker())
+        if (j>0 && board[i][j-1].IsNotEmpty() && !board[i][j-1].isChecker())
         {
             ListOfNeighbors.add(board[i][j-1]);
         }
-        else if (j>1 && !board[i][j-2].isChecker())
+        else if (j>1 && board[i][j-2].IsNotEmpty() && !board[i][j-2].isChecker())
         {
             ListOfNeighbors.add(board[i][j-2]);
         }
-        if (i<16 && !board[i+1][j].isChecker())
+        if (i<16 && board[i+1][j].IsNotEmpty() && !board[i+1][j].isChecker())
         {
             ListOfNeighbors.add(board[i+1][j]);
         }
-        else if (i<15 && !board[i+2][j].isChecker())
+        else if (i<15 && board[i+2][j].IsNotEmpty() && !board[i+2][j].isChecker())
         {
             ListOfNeighbors.add(board[i+2][j]);
 
         }
-        if (i< 16 && j<16 && !board[i+1][j+1].isChecker())
+        if (i< 16 && j<16 && board[i+1][j+1].IsNotEmpty() && !board[i+1][j+1].isChecker())
         {
             ListOfNeighbors.add(board[i+1][j+1]);
         }
-        else if (i<15 && j<15 &&!board[i+2][j+2].isChecker())
+        else if (i<15 && j<15 && board[i+2][j+2].IsNotEmpty() &&!board[i+2][j+2].isChecker())
         {
             ListOfNeighbors.add(board[i+2][j+2]);
 
         }
-        if (j<16 && !board[i][j+1].isChecker())
+        if (j<16 && board[i][j+1].IsNotEmpty() && !board[i][j+1].isChecker())
         {
             ListOfNeighbors.add(board[i][j+1]);
         }
-        else if (j<15 && !board[i][j+2].isChecker())
+        else if (j<15 &&  board[i][j+2].IsNotEmpty() && !board[i][j+2].isChecker())
         {
             ListOfNeighbors.add(board[i][j+2]);
         }
@@ -333,24 +333,44 @@ public class Board extends AbstractBoard
             }
             else
             {
-                System.out.print("1");
+                System.out.print("nie mozliwy ruch");
             }
         }
         else
         {
-            System.out.print("2");
+            System.out.print("to nie jest pion");
         }
     }
         
+    @Override
+       public int getSize()
+        {
+            return 17;
+        }
+        
+    @Override
+    public Field getField(int i, int j)
+    {
+        return board[i][j];
+    }
+    
+    /*@Override
+    public int MaxNumberNotEmptyField()
+    {
+        return 13;
+    }*/
+        
 	public static void main(String args[]) 
 	{
-        try {
-            Board a = new Board(6);
-            a.Step(4, 3, 4, 4);
-             a.Step(4, 4, 4, 5);
-            System.out.print(a.write());
-        } catch (WrongNumberOfPlayers ex) {
-            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            try {
+                Board a = new Board(6);
+                a.Step(5, 1, 5, 0);
+                //a.Step(4, 4, 4, 5);
+                System.out.print(a.write());
+            } 
+            catch (WrongNumberOfPlayers ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 }
+    

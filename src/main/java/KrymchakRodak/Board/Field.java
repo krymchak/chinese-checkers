@@ -6,4 +6,6 @@ public abstract class Field
 	public abstract void setChecker(Checker checker);
 	public abstract boolean isChecker ();
         public abstract Checker getChecker();
+        public abstract Circle getCircle ();
+        public abstract void setCircle (Circle circle);
 }

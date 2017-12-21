@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public abstract class AbstractBoard 
 {
 	Field board[][];
-        protected abstract void  FillBoard (int numberOfPlayers);
+        protected abstract void  FillBoard (int numberOfPlayers);  
         public abstract void  Step (int i1, int j1, int i2, int j2);
         /*
         * Common constructor
@@ -26,5 +26,8 @@ public abstract class AbstractBoard
             }
         }
 	public abstract ArrayList<Field> createListOfNeighbors(int i, int j);
+        public abstract int getSize();
+        public abstract Field getField(int i, int j);
+        //public abstract int MaxNumberNotEmptyField();
 }
 
