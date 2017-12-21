@@ -117,7 +117,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color/*, createListOfNeighbors(i, j)*/));
 				}
 			}
 		}
@@ -136,7 +136,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color/*,createListOfNeighbors(i, j)*/));
 				}
 			}
 		}
@@ -155,7 +155,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color/*, createListOfNeighbors(i, j)*/));
 				}
 			}
 		}
@@ -174,7 +174,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color/*, createListOfNeighbors(i, j)*/));
 				}
 			}
 		}
@@ -193,7 +193,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color/*, createListOfNeighbors(i, j)*/));
 				}
 			}
 		}
@@ -212,7 +212,7 @@ public class Board extends AbstractBoard
                             	board[i][j]=new NotEmptyField();
 				if (color!=null)
 				{
-					board[i][j].setChecker(new Checker(color, createListOfNeighbors(i, j)));
+					board[i][j].setChecker(new Checker(color/*, createListOfNeighbors(i, j)*/));
 				}
 			}
 		}
@@ -333,13 +333,22 @@ public class Board extends AbstractBoard
         return ListOfNeighbors;
     }
     
+    public boolean isPossibleStep (Field targetField, ArrayList <Field> listOfNeighbors)
+    {
+       for (int i=0; i<listOfNeighbors.size(); i++)
+       {
+           if (listOfNeighbors.get(i)==targetField)
+                return true;
+       }
+       return false;
+    }
     
     /*
     * TODO add exception, if not checker and if not possible step
     */
     /*
     * If the first field contains a checker and in his list of neighbors is contained second field,
-    * move checker in second field, create new list of neighbors for checker and delete checker from first field.
+    * move checker in second field and delete checker from first field.
     * @param i1, j1 - coordinates of first field
     * @param i2, j3 - coordinates of second field
     */
@@ -348,10 +357,9 @@ public class Board extends AbstractBoard
     {
         if (board[i1][j1].isChecker())
         {
-            if (board[i1][j1].getChecker().isPossibleStep(board[i2][j2]))
+            if (isPossibleStep(board[i2][j2], createListOfNeighbors(i1,j1)))
             {
                 board[i2][j2].setChecker(board[i1][j1].getChecker());
-                board[i2][j2].getChecker().changelistOfNeighbors(createListOfNeighbors(i2, j2));
                 board[i1][j1].setChecker(null);
             }
             else
@@ -361,7 +369,9 @@ public class Board extends AbstractBoard
         }
         else
         {
-            System.out.print("to nie jest pion");
+            System.out.println(i1);
+            System.out.println(j1);
+            System.out.println("to nie jest pion");
         }
     }
         

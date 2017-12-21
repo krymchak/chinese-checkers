@@ -39,4 +39,16 @@ public class EmptyField extends Field
         public void setCircle (Circle circle)
         {
         }
+        
+        @Override
+	public boolean isActive() 
+	{
+		return false;
+	}
+        
+        @Override
+	public void setActive(boolean active) 
+	{
+        }
+	
 }

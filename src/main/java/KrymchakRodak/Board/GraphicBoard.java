@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -19,8 +21,13 @@ import javax.swing.JPanel;
 public class GraphicBoard extends JPanel
 {
     AbstractBoard board;
+    boolean isFirstPressed=true;
+    int aktiveI;
+    int aktiveJ;
     public GraphicBoard(AbstractBoard board)
     {
+        MyMouseHandler handler = new MyMouseHandler();
+	this.addMouseListener(handler);
         setBackground(Color.WHITE);
         this.board=board;
         setSize(40*board.getSize(),40*board.getSize());
@@ -28,7 +35,7 @@ public class GraphicBoard extends JPanel
         int radius=15;
         int sizeOfLine;
         int shift;
-        int Y=10;
+        int Y=100;
         for (int i=0; i<board.getSize(); i++)
         {
                 sizeOfLine=0;
@@ -46,13 +53,12 @@ public class GraphicBoard extends JPanel
                         shift=shift-2;
                     }
                 }
-            Y=Y+25;
+            Y=Y+30;
         }
-		
     }
     
     	/** 
-	* Rysuje pole, wilka i zajecy na nim
+	* 
 	* @param g Graphics
 	*/
 	private void doDrawing(Graphics g) 
@@ -62,7 +68,12 @@ public class GraphicBoard extends JPanel
                 {
                     for (int j=0; j<board.getSize(); j++)
                     {
-                        if (board.getField(i, j).IsNotEmpty())
+                        if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
+                        {
+                            g2d.setPaint(Color.BLACK);
+                            g2d.fill(board.getField(i, j).getCircle()); 
+                        }
+                        else if (board.getField(i, j).IsNotEmpty())
                         {
                             if (!board.getField(i, j).isChecker())
                             {
@@ -76,33 +87,6 @@ public class GraphicBoard extends JPanel
                         }
                     }
                 }
-                //g2d.setPaint(Color.BLUE);
-		//g2d.fill(new Circle(325,10,30,30)); 
-               // g2d.setPaint(Color.BLUE);
-		//g2d.fill(new Circle(340,35,30,30));
-               // g2d.setPaint(Color.BLUE);
-		//g2d.fill(new Circle(310,35,30,30));
-		/*zrect[wolf.getX()][wolf.getY()].changeColor (Color.BLACK);
-		for (int i=0; i<counterHares; i++)
-		{
-			if (zrect[hares.get(i).getX()][hares.get(i).getY()]!=zrect[wolf.getX()][wolf.getY()])
-				zrect[hares.get(i).getX()][hares.get(i).getY()].changeColor (Color.WHITE);
-			else
-			{
-				hares.remove(i);
-				counterHares--;
-				i--;
-				wolf.CzyOdpoczywa=5;
-			}
-		} 
-		for (int i=0; i<n; i++)
-		{
-			for (int j=0; j<m; j++)
-			{
-				g2d.setPaint(zrect[i][j].getColor());
-				g2d.fill(zrect[i][j]);  
-			}
-		}*/
     }
 
 	/** 
@@ -115,6 +99,63 @@ public class GraphicBoard extends JPanel
         super.paintComponent(g);
         
         doDrawing(g);        
+    }
+    
+    private class MyMouseHandler extends MouseAdapter 
+    {
+        @Override
+	public void mousePressed(MouseEvent e) 
+        {
+            if ((SwingUtilities.isLeftMouseButton(e)))
+            {
+                if (isFirstPressed==true)
+                {
+                    int x = e.getX();
+                    int y = e.getY(); 
+                    for (int i=0; i<board.getSize(); i++)
+                    {
+                        for (int j=0; j<board.getSize(); j++)
+                        {
+                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
+                            {
+                                 board.getField(i, j).setActive(false);
+                            }
+                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
+                            {
+                                board.getField(i, j).setActive(true);
+                                aktiveI=i;
+                                aktiveJ=j;
+                                System.out.println(aktiveI+ " " + aktiveJ);
+                                System.out.println(board.getField(i, j).isChecker());
+                            }
+                        }
+                    }
+                    isFirstPressed=false;
+                }
+                else
+                {
+                    int x = e.getX();
+                    int y = e.getY(); 
+                    for (int i=0; i<board.getSize(); i++)
+                    {
+                        for (int j=0; j<board.getSize(); j++)
+                        {
+                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
+                            {
+                                 board.getField(i, j).setActive(false);
+                            }
+                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
+                            {
+                                board.Step(aktiveI, aktiveJ, i, j);
+                            }
+                        }
+                    }
+                    isFirstPressed=true;
+                }
+                repaint();
+            }
+                    
+        }
     }
     
     

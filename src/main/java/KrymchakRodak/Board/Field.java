@@ -8,4 +8,6 @@ public abstract class Field
         public abstract Checker getChecker();
         public abstract Circle getCircle ();
         public abstract void setCircle (Circle circle);
+        public abstract boolean isActive();
+        public abstract void setActive (boolean active);
 }

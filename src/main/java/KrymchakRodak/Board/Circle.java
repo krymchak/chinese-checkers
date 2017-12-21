@@ -35,5 +35,11 @@ public class Circle extends Ellipse2D.Float
 	{
 		setFrame(x, y, width, height);
 	}
+        
+        public boolean isHit(float x, float y) 
+	{
+		return getBounds2D().contains(x, y);
+        }
+	
 	
 }

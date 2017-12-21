@@ -8,11 +8,24 @@ public class NotEmptyField extends Field
 {
 	Checker checker = null;
         Circle circle;
+        boolean active=false;
 	
         @Override
 	public boolean IsNotEmpty() 
 	{
 		return true;
+	}
+        
+        @Override
+	public boolean isActive() 
+	{
+		return active;
+	}
+        
+        @Override
+	public void setActive(boolean active) 
+	{
+		this.active=active;
 	}
 	
         @Override
@@ -42,6 +55,10 @@ public class NotEmptyField extends Field
         @Override
 	public boolean isChecker ()
 	{
-            return checker!=null;
+            if(checker==null)
+                return false;
+            else
+                return true;
+            //return checker!=null;
 	}
 }
