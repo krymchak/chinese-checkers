@@ -7,7 +7,7 @@ public class Lobby {
     private static int lobbySizes[];
     private ArrayList<GameLobby> lobbies;
 
-    public static Lobby getInstance() {
+    /*public static Lobby getInstance() {
         if (instance == null) {
             synchronized (Lobby.class) {
                 if (instance == null) {
@@ -32,9 +32,9 @@ public class Lobby {
         for (int size : lobbySizes) {
             this.lobbies.add(new GameLobby(size, id++));
         }
-    }
+    }*/
 
-    public void addPlayerToLobby(Player player, int lobbySize) {
+    /*public void addPlayerToLobby(Player player, int lobbySize) {
         this.lobbies.forEach(lobby -> {
             if (lobby.getSize() == lobbySize) {
                 lobby.addPlayer(player);
@@ -48,5 +48,5 @@ public class Lobby {
 
     public void startNewGame(GameLobby gameLobby) {
 
-    }
+    }*/
 }

@@ -4,26 +4,24 @@ import java.util.HashSet;
 
 public class GameLobby {
     private int numberOfPlayers;
-    private HashSet<Player> players;
+    private HashSet<String> players;
     private int lobbyID;
-
 
     public GameLobby(int numOfPlayers, int lobbyID) {
         this.numberOfPlayers = numOfPlayers;
-        this.players = new HashSet<Player>(numOfPlayers);
+        this.players = new HashSet<String>(numOfPlayers);
         this.lobbyID = lobbyID;
     }
 
-    public void addPlayer(Player player) {
+   public void addPlayer(String player) {
         this.players.add(player);
+        if (enoughPlayers()) {
+            resetLobby();
+        }
     }
 
-    public int getPlayerCount() {
+    private int getPlayerCount() {
         return this.players.size();
-    }
-
-    public int getSize() {
-        return this.numberOfPlayers;
     }
 
     public int getLobbyID() {
@@ -34,7 +32,7 @@ public class GameLobby {
         this.players.clear();
     }
 
-    public boolean checkIfEnoughPlayers() {
+    public boolean enoughPlayers() {
         return (this.numberOfPlayers == getPlayerCount());
     }
 }

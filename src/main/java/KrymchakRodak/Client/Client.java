@@ -1,30 +1,37 @@
 package KrymchakRodak.Client;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import javax.swing.*;
+import java.io.IOException;
 
 public class Client {
-    private static final int PORT = 2137;
-    private String username = "";
-    private Socket socket;
-    private OutputStreamWriter out;
-    private BufferedReader in;
+    static ClientConnection connection = null;
+    public static void main(String[] args) {
+        try {
+            connection = new ClientConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        startApp();
+        String line;
+        try {
+            while ((line = connection.in.readLine()) != null) {
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-    public Client() throws Exception {
-        socket = new Socket("localhost", PORT);
-        out = new OutputStreamWriter(socket.getOutputStream(),
-                StandardCharsets.UTF_8);
-        in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
     }
 
-    void setUsername(String name) {
-        this.username = name;
+    static void startApp() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame frame = new MainFrame("Login");
+                frame.setSize(500, 400);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
+            }
+        });
     }
 
-    void loginToLobby() {
-    }
 }
