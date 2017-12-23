@@ -5,6 +5,7 @@
  */
 package KrymchakRodak.Board;
 
+import java.awt.Button;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,12 +25,16 @@ public class GraphicBoard extends JPanel
     boolean isFirstPressed=true;
     int aktiveI;
     int aktiveJ;
-    public GraphicBoard(AbstractBoard board)
+    Color color;
+    public GraphicBoard(AbstractBoard board, Color color)
     {
+        this.board=board;
+        this.color=color;       
         MyMouseHandler handler = new MyMouseHandler();
 	this.addMouseListener(handler);
+        //Button button = new Button("End of move");
+       //this.add(button);
         setBackground(Color.WHITE);
-        this.board=board;
         setSize(40*board.getSize(),40*board.getSize());
         int center=40*board.getSize()/2;
         int radius=15;
@@ -116,21 +121,22 @@ public class GraphicBoard extends JPanel
                     {
                         for (int j=0; j<board.getSize(); j++)
                         {
-                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
+                            if (board.getField(i, j).isChecker())
                             {
-                                 board.getField(i, j).setActive(false);
-                            }
-                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
-                            {
-                                board.getField(i, j).setActive(true);
-                                aktiveI=i;
-                                aktiveJ=j;
-                                System.out.println(aktiveI+ " " + aktiveJ);
-                                System.out.println(board.getField(i, j).isChecker());
+                                if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
+                                {
+                                     board.getField(i, j).setActive(false);
+                                }
+                                else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y) && board.getField(i, j).getChecker().getColor()==color)
+                                {
+                                    board.getField(i, j).setActive(true);
+                                    aktiveI=i;
+                                    aktiveJ=j;
+                                    isFirstPressed=false;
+                                }
                             }
                         }
                     }
-                    isFirstPressed=false;
                 }
                 else
                 {
@@ -144,13 +150,16 @@ public class GraphicBoard extends JPanel
                             {
                                  board.getField(i, j).setActive(false);
                             }
-                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
+                            else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
                             {
                                 board.Step(aktiveI, aktiveJ, i, j);
+                                aktiveI=i;
+                                aktiveJ=j;
+                                board.getField(aktiveI, aktiveJ).setActive(true);
                             }
                         }
                     }
-                    isFirstPressed=true;
+                    //isFirstPressed=true;
                 }
                 repaint();
             }
@@ -163,7 +172,7 @@ public class GraphicBoard extends JPanel
     {
         JFrame frame = new JFrame();
         try {
-            GraphicBoard pole = new GraphicBoard(new CreatorBoard().createBoard(6));
+            GraphicBoard pole = new GraphicBoard(new CreatorBoard().createBoard(2), Color.ORANGE);
             frame.add(pole);
             frame.setSize(17*40,17*40);
             frame.setVisible(true);

@@ -50,5 +50,11 @@ public class EmptyField extends Field
 	public void setActive(boolean active) 
 	{
         }
+
+    @Override
+    public int getTriangle() 
+    {
+        return 0;
+    }
 	
 }

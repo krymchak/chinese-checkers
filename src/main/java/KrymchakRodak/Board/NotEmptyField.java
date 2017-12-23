@@ -6,15 +6,26 @@ package KrymchakRodak.Board;
  */
 public class NotEmptyField extends Field
 {
-	Checker checker = null;
-        Circle circle;
-        boolean active=false;
+	private Checker checker = null;
+        private Circle circle;
+        private boolean active=false;
+        private int triangle;
 	
         @Override
 	public boolean IsNotEmpty() 
 	{
 		return true;
 	}
+        
+        public NotEmptyField()
+        {
+            
+        }
+        
+        public NotEmptyField(int triangle)
+        {
+            this.triangle=triangle;
+        }
         
         @Override
 	public boolean isActive() 
@@ -59,6 +70,10 @@ public class NotEmptyField extends Field
                 return false;
             else
                 return true;
-            //return checker!=null;
 	}
+        @Override
+        public int getTriangle ()
+        {
+            return triangle;
+        }
 }

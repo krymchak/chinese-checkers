@@ -10,4 +10,5 @@ public abstract class Field
         public abstract void setCircle (Circle circle);
         public abstract boolean isActive();
         public abstract void setActive (boolean active);
+        public abstract int getTriangle ();
 }

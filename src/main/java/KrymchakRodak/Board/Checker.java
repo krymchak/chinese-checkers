@@ -1,7 +1,6 @@
 package KrymchakRodak.Board;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 /**
  *
@@ -9,16 +8,22 @@ import java.util.ArrayList;
  */
 public class Checker
 {
-    Color color=null;
+    private Color color=null;
+    private int endTriangle;
     
     /*
     * Create Checker with given color
     */
-    public Checker (Color color)
+    public Checker (Color color, int endTriangle)
     {
         this.color=color;
+        this.endTriangle=endTriangle;
     }
     
+     public int getEndTriangle ()
+    {
+        return endTriangle;
+    }
     
     /*
     * @return color of Checker
