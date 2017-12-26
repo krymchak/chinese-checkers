@@ -2,12 +2,12 @@ package KrymchakRodak.Server;
 
 import java.util.ArrayList;
 
-public class Lobby {
+class Lobby {
     private static volatile Lobby instance;
-    private static int lobbySizes[];
+    private static int lobbySizes[] = {2, 3, 4, 6};
     private ArrayList<GameLobby> lobbies;
 
-    /*public static Lobby getInstance() {
+    static Lobby getInstance() {
         if (instance == null) {
             synchronized (Lobby.class) {
                 if (instance == null) {
@@ -32,21 +32,13 @@ public class Lobby {
         for (int size : lobbySizes) {
             this.lobbies.add(new GameLobby(size, id++));
         }
-    }*/
+    }
 
-    /*public void addPlayerToLobby(Player player, int lobbySize) {
+    void addPlayerToLobby(Client client, int lobbyID) {
         this.lobbies.forEach(lobby -> {
-            if (lobby.getSize() == lobbySize) {
-                lobby.addPlayer(player);
-
-                if (lobby.checkIfEnoughPlayers()) {
-                    startNewGame(lobby);
-                }
+            if (lobby.getLobbyID() == lobbyID) {
+                lobby.addPlayer(client);
             }
         });
     }
-
-    public void startNewGame(GameLobby gameLobby) {
-
-    }*/
 }

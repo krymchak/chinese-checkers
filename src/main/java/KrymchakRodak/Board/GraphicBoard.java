@@ -178,7 +178,7 @@ public class GraphicBoard extends JPanel
     {
         JFrame frame = new JFrame();
         try {
-            GraphicBoard pole = new GraphicBoard(new CreatorBoard().createBoard(2), Color.ORANGE);
+            GraphicBoard pole = new GraphicBoard(new CreatorBoard().createBoard(2), Color.GREEN);
             frame.add(pole);
             frame.setSize(17*40,17*40);
             frame.setVisible(true);

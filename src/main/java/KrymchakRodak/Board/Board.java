@@ -36,7 +36,7 @@ public class Board extends AbstractBoard
                     fillFirstTriangle(Color.ORANGE);
                     fillSecondTriangle(null);
                     fillThirdTriangle(null);
-                    fillFourthTriangle(Color.RED);
+                    fillFourthTriangle(Color.GREEN);
                     fillFifthTriangle(null);
                     fillSixthTriangle(null);
                     break;
@@ -47,9 +47,9 @@ public class Board extends AbstractBoard
                     fillWithEmpty();
                     fillCenter();
                     fillFirstTriangle(null);
-                    fillSecondTriangle(Color.ORANGE);
+                    fillSecondTriangle(Color.RED);
                     fillThirdTriangle(null);
-                    fillFourthTriangle(Color.RED);
+                    fillFourthTriangle(Color.GREEN);
                     fillFifthTriangle(null);
                     fillSixthTriangle(Color.BLUE);
                     break;
@@ -60,11 +60,11 @@ public class Board extends AbstractBoard
                     fillWithEmpty();
                     fillCenter();
                     fillFirstTriangle(null);
-                    fillSecondTriangle(Color.ORANGE);
-                    fillThirdTriangle(Color.RED);
+                    fillSecondTriangle(Color.RED);
+                    fillThirdTriangle(Color.BLUE);
                     fillFourthTriangle(null);
-                    fillFifthTriangle(Color.BLUE);
-                    fillSixthTriangle(Color.GREEN);
+                    fillFifthTriangle(Color.GREEN);
+                    fillSixthTriangle(Color.ORANGE);
                     break;
                 /*
                  * If numberOfPlayers 6, tneh fill all triangle with checker, rest fill with NotEmpty fields

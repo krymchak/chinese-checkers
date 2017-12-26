@@ -1,7 +1,10 @@
 package KrymchakRodak.Client;
 
+import KrymchakRodak.Board.GraphicBoard;
+import KrymchakRodak.Game.GameData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.istack.internal.NotNull;
 
@@ -15,7 +18,7 @@ public class ClientConnection {
     private String username = "";
     private Socket socket;
     private PrintWriter out;
-    BufferedReader in;
+    private BufferedReader in;
 
     ClientConnection() throws IOException {
         socket = new Socket("localhost", PORT);
@@ -29,25 +32,26 @@ public class ClientConnection {
         node.put("RequestType", "LOGIN");
         node.put("username", username);
         out.println(node.toString());
-        if (!waitForResponse().equals("LOGIN_SUCCESS")) {
-            return true;
-        }
-        return false;
+        out.flush();
+
+        return waitForResponse().get("Response").asText().equals("LOGIN_SUCCESS");
     }
 
-    void joinLobby(int lobbyID) {
+    GameData joinLobby(int lobbyID) {
         ObjectNode node = mapper.createObjectNode();
         node.put("RequestType", "JOIN_LOBBY");
         node.put("LobbyID", lobbyID);
         out.println(node.toString());
+        out.flush();
+
+        return new GameData(waitForResponse());
     }
 
-    private String waitForResponse() {
-        String jsonString;
+    private JsonNode waitForResponse() {
+        String jsonString = "";
         try {
             if ((jsonString = in.readLine()) != null) {
-                JsonNode node = mapper.readTree(jsonString);
-                return node.get("Response").asText();
+                return mapper.readTree(jsonString);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,5 +64,13 @@ public class ClientConnection {
         socket.close();
         in.close();
         out.close();
+    }
+
+    void setUsername(String username) {
+        this.username = username;
+    }
+
+    String getUsername() {
+        return this.username;
     }
 }

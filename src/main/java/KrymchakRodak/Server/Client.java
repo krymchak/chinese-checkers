@@ -11,7 +11,7 @@ public class Client extends Thread{
     private BufferedReader in;
     private PrintWriter out;
     private Socket client;
-    String username;
+    private String username;
 
     Client(Socket clientSocket) {
         this.client = clientSocket;
@@ -35,18 +35,33 @@ public class Client extends Thread{
     }
 
     private void parseJson(JsonNode node) {
+        System.out.println(node.toString());
         switch (node.get("RequestType").asText()) {
             case "LOGIN":
                 String username = node.get("username").asText();
                 if(Server.usernames.contains(username)) {
-                    out.println(ServerCommunication.badLogin());
+                    ServerCommunication.badLogin(this);
                 } else {
                     Server.usernames.add(username);
-                    out.println(ServerCommunication.loginSuccess());
+                    this.username = username;
+                    ServerCommunication.loginSuccess(this);
                 }
+                break;
             case "JOIN_LOBBY":
+                int lobbyID = node.get("LobbyID").asInt();
+                Lobby.getInstance().addPlayerToLobby(this, lobbyID);
+                break;
 
         }
 
+    }
+
+    void sendMessage(String JsonString) {
+        this.out.println(JsonString);
+        this.out.flush();
+    }
+
+    String getUsername() {
+        return this.username;
     }
 }

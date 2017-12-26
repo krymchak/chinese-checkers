@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Server {
     private static final int PORT = 2137;
-    static ArrayList<Client> clients = new ArrayList<>();
+    private static ArrayList<Client> clients = new ArrayList<>();
     static ArrayList<String> usernames = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
@@ -24,9 +24,9 @@ public class Server {
 
     }
 
-    Client getByUsername(String username) {
+    static Client getByUsername(String username) {
         for (Client connection: clients) {
-            if(connection.username.equals(username)) {
+            if(connection.getUsername().equals(username)) {
                 return connection;
             }
         }

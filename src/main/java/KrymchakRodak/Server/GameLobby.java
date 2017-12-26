@@ -1,38 +1,56 @@
 package KrymchakRodak.Server;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class GameLobby {
+class GameLobby {
     private int numberOfPlayers;
-    private HashSet<String> players;
+    private LinkedList<Client> players;
     private int lobbyID;
 
-    public GameLobby(int numOfPlayers, int lobbyID) {
+    GameLobby(int numOfPlayers, int lobbyID) {
         this.numberOfPlayers = numOfPlayers;
-        this.players = new HashSet<String>(numOfPlayers);
+        this.players = new LinkedList<>();
         this.lobbyID = lobbyID;
     }
 
-   public void addPlayer(String player) {
+   void addPlayer(Client player) {
         this.players.add(player);
         if (enoughPlayers()) {
+            ServerCommunication.startGame(getPlayers(), getLobbyID());
             resetLobby();
+            //return;
         }
+        //ServerCommunication.updateLobby(getPlayers(), getUsernames(), getLobbyID());
     }
 
     private int getPlayerCount() {
         return this.players.size();
     }
 
-    public int getLobbyID() {
+    int getLobbyID() {
         return this.lobbyID;
     }
 
-    public void resetLobby() {
+    private void resetLobby() {
         this.players.clear();
     }
 
-    public boolean enoughPlayers() {
+    private boolean enoughPlayers() {
         return (this.numberOfPlayers == getPlayerCount());
+    }
+
+    private ArrayList<String> getUsernames() {
+        ArrayList<String> names = new ArrayList<>();
+
+        players.forEach(c -> {
+            names.add(c.getUsername());
+        });
+
+        return names;
+    }
+
+    private LinkedList<Client> getPlayers() {
+        return players;
     }
 }
