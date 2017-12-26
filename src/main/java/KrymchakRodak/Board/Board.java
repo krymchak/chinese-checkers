@@ -365,7 +365,7 @@ public class Board extends AbstractBoard
     * @param i2, j3 - coordinates of second field
     */
     @Override
-    public void  Step (int i1, int j1, int i2, int j2) 
+    public void  Step (int i1, int j1, int i2, int j2) throws ImpossibleStep, IsNotChecker
     {
         if (board[i1][j1].isChecker())
         {
@@ -376,14 +376,12 @@ public class Board extends AbstractBoard
             }
             else
             {
-                System.out.print("nie mozliwy ruch");
+                throw new ImpossibleStep();
             }
         }
         else
         {
-            System.out.println(i1);
-            System.out.println(j1);
-            System.out.println("to nie jest pion");
+            throw new IsNotChecker();
         }
     }
         
@@ -405,11 +403,17 @@ public class Board extends AbstractBoard
         return 13;
     }*/
         
-	public static void main(String args[]) 
+	public static void main(String args[])
 	{
             try {
                 Board a = new Board(6);
-                a.Step(5, 1, 5, 0);
+                try {
+                    a.Step(4, 3, 4, 4);
+                } catch (ImpossibleStep ex) {
+                    System.out.print("ImpossibleStep");
+                } catch (IsNotChecker ex) {
+                    System.out.print("IsNotChecker");
+                }
                 //a.Step(4, 4, 4, 5);
                 System.out.print(a.write());
             } 

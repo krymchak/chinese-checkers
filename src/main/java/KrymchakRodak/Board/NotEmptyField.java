@@ -7,7 +7,7 @@ package KrymchakRodak.Board;
 public class NotEmptyField extends Field
 {
 	private Checker checker = null;
-        private Circle circle;
+        private Circle circle=null;
         private boolean active=false;
         private int triangle;
 	

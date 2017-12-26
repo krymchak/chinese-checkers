@@ -152,10 +152,16 @@ public class GraphicBoard extends JPanel
                             }
                             else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
                             {
-                                board.Step(aktiveI, aktiveJ, i, j);
-                                aktiveI=i;
-                                aktiveJ=j;
-                                board.getField(aktiveI, aktiveJ).setActive(true);
+                                try {
+                                    board.Step(aktiveI, aktiveJ, i, j);
+                                    aktiveI=i;
+                                    aktiveJ=j;
+                                    board.getField(aktiveI, aktiveJ).setActive(true);
+                                } catch (ImpossibleStep ex) {
+                                    Logger.getLogger(GraphicBoard.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IsNotChecker ex) {
+                                    Logger.getLogger(GraphicBoard.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
                         }
                     }

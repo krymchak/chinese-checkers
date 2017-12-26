@@ -10,7 +10,7 @@ public abstract class AbstractBoard
 {
 	Field board[][];
         protected abstract void  FillBoard (int numberOfPlayers);  
-        public abstract void  Step (int i1, int j1, int i2, int j2);
+        public abstract void  Step (int i1, int j1, int i2, int j2) throws ImpossibleStep, IsNotChecker;
         /*
         * Common constructor
         */

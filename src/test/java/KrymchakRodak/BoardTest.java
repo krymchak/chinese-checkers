@@ -7,6 +7,10 @@ package KrymchakRodak;
 
 import KrymchakRodak.Board.Board;
 import KrymchakRodak.Board.WrongNumberOfPlayers;
+import KrymchakRodak.Board.IsNotChecker;
+import KrymchakRodak.Board.ImpossibleStep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -92,6 +96,24 @@ public class BoardTest {
     "           GG    \n" +
     "            G    \n";  
     
+    String boardAfterStep="    O            \n" +
+"    OO           \n" +
+"    OOO          \n" +
+"    OOOO         \n" +
+"PPP.P....RRRR    \n" +
+" PPP......RRR    \n" +
+"  PP.......RR    \n" +
+"   P........R    \n" +
+"    .........    \n" +
+"    C........B   \n" +
+"    CC.......BB  \n" +
+"    CCC......BBB \n" +
+"    CCCC.....BBBB\n" +
+"         GGGG    \n" +
+"          GGG    \n" +
+"           GG    \n" +
+"            G    \n";
+    
     /**
     * Test of create board for two players, of class Board.
     */
@@ -135,5 +157,30 @@ public class BoardTest {
     public void testWrongNumberOfPlayers() throws WrongNumberOfPlayers{
         Board board = new Board(5);
         assertEquals(boardForSix, board.write());
+    }
+    
+        @Test
+    public void testStep() throws WrongNumberOfPlayers, ImpossibleStep, IsNotChecker {
+        Board board = new Board(6);
+        board.Step(4, 3, 4, 4);
+        assertEquals(boardAfterStep, board.write());
+    }
+    
+    /**
+    * Test of step with not checker, of class Board.
+    */
+    @Test(expected = IsNotChecker.class)
+    public void testIsNotChecker() throws IsNotChecker, WrongNumberOfPlayers, ImpossibleStep{
+            Board board = new Board(6);
+            board.Step(10, 10, 11, 10);
+    }
+    
+    /**
+    * Test of impossible step, of class Board.
+    */
+    @Test(expected = ImpossibleStep.class)
+    public void testImpossibleStep() throws ImpossibleStep, WrongNumberOfPlayers, IsNotChecker{
+            Board board = new Board(6);
+            board.Step(5, 1, 5, 0);
     }
 }
