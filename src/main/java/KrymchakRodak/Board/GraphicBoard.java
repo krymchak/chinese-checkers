@@ -32,8 +32,10 @@ public class GraphicBoard extends JPanel
         this.color=color;       
         MyMouseHandler handler = new MyMouseHandler();
 	this.addMouseListener(handler);
-        //Button button = new Button("End of move");
-       //this.add(button);
+        Button button1 = new Button("End of move");
+        Button button2 = new Button("Reset of move");
+        this.add(button1);
+        this.add(button2);
         setBackground(Color.WHITE);
         setSize(40*board.getSize(),40*board.getSize());
         int center=40*board.getSize()/2;
@@ -158,9 +160,8 @@ public class GraphicBoard extends JPanel
                                     aktiveJ=j;
                                     board.getField(aktiveI, aktiveJ).setActive(true);
                                 } catch (ImpossibleStep ex) {
-                                    Logger.getLogger(GraphicBoard.class.getName()).log(Level.SEVERE, null, ex);
+                                    board.getField(aktiveI, aktiveJ).setActive(true);
                                 } catch (IsNotChecker ex) {
-                                    Logger.getLogger(GraphicBoard.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                         }
