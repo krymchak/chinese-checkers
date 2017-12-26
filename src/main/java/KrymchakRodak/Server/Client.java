@@ -51,6 +51,8 @@ public class Client extends Thread{
                 int lobbyID = node.get("LobbyID").asInt();
                 Lobby.getInstance().addPlayerToLobby(this, lobbyID);
                 break;
+            case "MOVE_CHECKER":
+                ServerCommunication.moveChecker();
 
         }
 

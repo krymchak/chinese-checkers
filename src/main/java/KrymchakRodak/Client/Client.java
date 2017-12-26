@@ -1,6 +1,6 @@
 package KrymchakRodak.Client;
 
-import KrymchakRodak.Game.GameData;
+import KrymchakRodak.Game.ClientGameData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,12 +86,20 @@ public class Client {
                     cardLayout.show(cards, "WAIT");
                     int lobbyID = lobbyList.getSelectedIndex();
                     JFrame frame2 = new JFrame();
-                    GameData game = Client.connection.joinLobby(lobbyID);
-                    frame2.setEnabled(game.isActive());
+                    ClientGameData game = Client.connection.joinLobby(lobbyID);
+                    game.getBoard().endMoveButton.addActionListener(al1 -> {
+                        connection.move(game.getBoard().getMoves(), game.getGameID());
+                        frame2.disable();
+                    });
+
                     frame2.add(game.getBoard());
-                    frame2.setSize(17*40,17*40);
+                    frame2.setEnabled(game.isActive());
+                    frame2.setSize(20*40,20*40);
                     frame2.setVisible(true);
                     frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    //while (game.gameActive) {
+                        //get move send message to server, wait for turn
+                    //}
 
                 });
 

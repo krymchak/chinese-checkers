@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -22,20 +23,25 @@ import javax.swing.JPanel;
 public class GraphicBoard extends JPanel
 {
     AbstractBoard board;
+    Field [][] oldBoard;
+    ArrayList<MoveInfo> moves = null;
     boolean isFirstPressed=true;
     int aktiveI;
     int aktiveJ;
     Color color;
+    public Button endMoveButton, cancelMoveButton;
     public GraphicBoard(AbstractBoard board, Color color)
     {
         this.board=board;
-        this.color=color;       
+        this.color=color;
+        this.moves = new ArrayList<>();
+
         MyMouseHandler handler = new MyMouseHandler();
 	this.addMouseListener(handler);
-        Button button1 = new Button("End of move");
-        Button button2 = new Button("Reset of move");
-        this.add(button1);
-        this.add(button2);
+        endMoveButton = new Button("End of move");
+        cancelMoveButton = new Button("Reset of move");
+        this.add(endMoveButton);
+        this.add(cancelMoveButton);
         setBackground(Color.WHITE);
         setSize(40*board.getSize(),40*board.getSize());
         int center=40*board.getSize()/2;
@@ -62,6 +68,8 @@ public class GraphicBoard extends JPanel
                 }
             Y=Y+30;
         }
+        oldBoard = board.board;
+
     }
     
     	/** 
@@ -90,7 +98,7 @@ public class GraphicBoard extends JPanel
                             {
                                 g2d.setPaint(board.getField(i, j).getChecker().getColor());
                             }
-                            g2d.fill(board.getField(i, j).getCircle()); 
+                            g2d.fill(board.getField(i, j).getCircle());
                         }
                     }
                 }
@@ -105,7 +113,7 @@ public class GraphicBoard extends JPanel
 	{
         super.paintComponent(g);
         
-        doDrawing(g);        
+        doDrawing(g);
     }
     
     private class MyMouseHandler extends MouseAdapter 
@@ -115,7 +123,7 @@ public class GraphicBoard extends JPanel
         {
             if ((SwingUtilities.isLeftMouseButton(e)))
             {
-                if (isFirstPressed==true)
+                if (isFirstPressed)
                 {
                     int x = e.getX();
                     int y = e.getY(); 
@@ -156,6 +164,7 @@ public class GraphicBoard extends JPanel
                             {
                                 try {
                                     board.Step(aktiveI, aktiveJ, i, j);
+                                    moves.add(new MoveInfo(aktiveI, aktiveJ, i, j));
                                     aktiveI=i;
                                     aktiveJ=j;
                                     board.getField(aktiveI, aktiveJ).setActive(true);
@@ -173,9 +182,17 @@ public class GraphicBoard extends JPanel
                     
         }
     }
-    
-    
-    public static void main(String args[]) 
+
+    public ArrayList<MoveInfo> getMoves() {
+        return moves;
+    }
+    public void newMove() {
+        this.oldBoard = board.board;
+        this.moves.clear();
+        this.isFirstPressed = true;
+    }
+
+    public static void main(String args[])
     {
         JFrame frame = new JFrame();
         try {

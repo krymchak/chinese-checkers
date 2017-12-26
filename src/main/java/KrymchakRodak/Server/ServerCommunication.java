@@ -1,5 +1,6 @@
 package KrymchakRodak.Server;
 
+import KrymchakRodak.Game.ServerGameData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 class ServerCommunication {
+    private static int gameID = 0;
     private static ObjectMapper mapper = new ObjectMapper();
 
     static void badLogin(Client client) {
@@ -73,13 +75,22 @@ class ServerCommunication {
                 checkerColor.add("PINK");
                 break;
         }
+
+
         for (Client client: players) {
             ObjectNode jsonNode = mapper.createObjectNode();
             jsonNode.put("Response", "START_GAME");
             jsonNode.put("GameSize", gameSize);
             jsonNode.put("CheckersColor", checkerColor.get(players.indexOf(client)));
             jsonNode.put("FirstTurn", players.getFirst().equals(client));
+            jsonNode.put("GameID", gameID);
             client.sendMessage(jsonNode.toString());
         }
+        Server.addGame(new ServerGameData(players, gameSize, gameID++));
+
+    }
+
+    static void moveChecker() {
+
     }
 }

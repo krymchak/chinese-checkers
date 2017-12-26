@@ -1,16 +1,15 @@
 package KrymchakRodak.Client;
 
-import KrymchakRodak.Board.GraphicBoard;
-import KrymchakRodak.Game.GameData;
+import KrymchakRodak.Board.MoveInfo;
+import KrymchakRodak.Game.ClientGameData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sun.istack.internal.NotNull;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class ClientConnection {
     private static final int PORT = 2137;
@@ -37,14 +36,24 @@ public class ClientConnection {
         return waitForResponse().get("Response").asText().equals("LOGIN_SUCCESS");
     }
 
-    GameData joinLobby(int lobbyID) {
+    void move(ArrayList<MoveInfo> moves, int gameID) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put("RequestType", "MOVE_CHECKER");
+        node.put("GameID", gameID);
+        //node.putArray("Moves").addAll(moveArray);
+
+        out.println(node.toString());
+        out.flush();
+    }
+
+    ClientGameData joinLobby(int lobbyID) {
         ObjectNode node = mapper.createObjectNode();
         node.put("RequestType", "JOIN_LOBBY");
         node.put("LobbyID", lobbyID);
         out.println(node.toString());
         out.flush();
 
-        return new GameData(waitForResponse());
+        return new ClientGameData(waitForResponse());
     }
 
     private JsonNode waitForResponse() {
