@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
 public class Board extends AbstractBoard
 {
-    /*
- * TODO add exception for numberOfPlayers!=2,3,4,6
- */
+
+    boolean wasStep=false;
+    boolean wasJump=false;
     /*
     * Call the constructor from AbstractBoard
     * @ numberOfPlayers 
@@ -279,87 +281,90 @@ public class Board extends AbstractBoard
     * @return list of neighbors
     */
     @Override
-    public ArrayList<Field> createListOfNeighbors(int i, int j)
+    public ArrayList<Neighbors> createListOfNeighbors(int i, int j)
     {
-        ArrayList<Field> ListOfNeighbors=new ArrayList<Field>();
-        if (i>0 && board[i-1][j].IsNotEmpty() &&!board[i-1][j].isChecker())
+        ArrayList<Neighbors> ListOfNeighbors=new ArrayList<Neighbors>();
+        if (i>0 && board[i-1][j].IsNotEmpty() &&!board[i-1][j].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-1][j].getTriangle()))
-                ListOfNeighbors.add(board[i-1][j]);
+                ListOfNeighbors.add(new Neighbors(board[i-1][j], false));
         }
         else if (i>1 && board[i-2][j].IsNotEmpty() && !board[i-2][j].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i-2][j].getChecker().getEndTriangle() != board[i-1][j].getTriangle()))
-                ListOfNeighbors.add(board[i-2][j]);
+                ListOfNeighbors.add(new Neighbors(board[i-2][j], true));
         }
-        if (i>0 && j>0 && board[i-1][j-1].IsNotEmpty() && !board[i-1][j-1].isChecker())
+        if (i>0 && j>0 && board[i-1][j-1].IsNotEmpty() && !board[i-1][j-1].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-1][j-1].getTriangle()))
-                ListOfNeighbors.add(board[i-1][j-1]);
+                ListOfNeighbors.add(new Neighbors(board[i-1][j-1],false));
         }
         else if (i>1 && j>2 && board[i-2][j-2].IsNotEmpty() && !board[i-2][j-2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-2][j-2].getTriangle()))
-                ListOfNeighbors.add(board[i-2][j-2]);
+                ListOfNeighbors.add(new Neighbors(board[i-2][j-2], true));
         }
-        if (j>0 && board[i][j-1].IsNotEmpty() && !board[i][j-1].isChecker())
+        if (j>0 && board[i][j-1].IsNotEmpty() && !board[i][j-1].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j-1].getTriangle()))
-                ListOfNeighbors.add(board[i][j-1]);
+                ListOfNeighbors.add(new Neighbors(board[i][j-1], false));
         }
         else if (j>1 && board[i][j-2].IsNotEmpty() && !board[i][j-2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j-2].getTriangle()))
-                ListOfNeighbors.add(board[i][j-2]);
+                ListOfNeighbors.add(new Neighbors(board[i][j-2], true));
         }
-        if (i<16 && board[i+1][j].IsNotEmpty() && !board[i+1][j].isChecker())
+        if (i<16 && board[i+1][j].IsNotEmpty() && !board[i+1][j].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+1][j].getTriangle()))
-                ListOfNeighbors.add(board[i+1][j]);
+                ListOfNeighbors.add(new Neighbors(board[i+1][j], false));
         }
         else if (i<15 && board[i+2][j].IsNotEmpty() && !board[i+2][j].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+2][j].getTriangle()))
-                ListOfNeighbors.add(board[i+2][j]);
+                ListOfNeighbors.add(new Neighbors(board[i+2][j], true));
 
         }
-        if (i< 16 && j<16 && board[i+1][j+1].IsNotEmpty() && !board[i+1][j+1].isChecker())
+        if (i< 16 && j<16 && board[i+1][j+1].IsNotEmpty() && !board[i+1][j+1].isChecker()&& !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+1][j+1].getTriangle()))
-                ListOfNeighbors.add(board[i+1][j+1]);
+                ListOfNeighbors.add(new Neighbors(board[i+1][j+1], false));
         }
         else if (i<15 && j<15 && board[i+2][j+2].IsNotEmpty() &&!board[i+2][j+2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+2][j+2].getTriangle()))
-                ListOfNeighbors.add(board[i+2][j+2]);
+                ListOfNeighbors.add(new Neighbors(board[i+2][j+2], true));
 
         }
-        if (j<16 && board[i][j+1].IsNotEmpty() && !board[i][j+1].isChecker())
+        if (j<16 && board[i][j+1].IsNotEmpty() && !board[i][j+1].isChecker()&& !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j+1].getTriangle()))
-                ListOfNeighbors.add(board[i][j+1]);
+                ListOfNeighbors.add(new Neighbors(board[i][j+1], false));
         }
         else if (j<15 &&  board[i][j+2].IsNotEmpty() && !board[i][j+2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j+2].getTriangle()))
-                ListOfNeighbors.add(board[i][j+2]);
+                ListOfNeighbors.add(new Neighbors(board[i][j+2], true));
         }
         return ListOfNeighbors;
     }
     
-    public boolean isPossibleStep (Field targetField, ArrayList <Field> listOfNeighbors)
+    public boolean isPossibleStep (Field targetField, ArrayList <Neighbors> listOfNeighbors)
     {
        for (int i=0; i<listOfNeighbors.size(); i++)
        {
-           if (listOfNeighbors.get(i)==targetField)
-                return true;
+           if (listOfNeighbors.get(i).getField()==targetField)
+           {
+               if (listOfNeighbors.get(i).isJump())
+                   wasJump=true;
+               else
+                   wasStep=true;
+               return true;
+           }
        }
        return false;
     }
     
-    /*
-    * TODO add exception, if not checker and if not possible step
-    */
     /*
     * If the first field contains a checker and in his list of neighbors is contained second field,
     * move checker in second field and delete checker from first field.
@@ -371,7 +376,7 @@ public class Board extends AbstractBoard
     {
         if (board[i1][j1].isChecker())
         {
-            if (isPossibleStep(board[i2][j2], createListOfNeighbors(i1,j1)))
+            if (!wasStep && isPossibleStep(board[i2][j2], createListOfNeighbors(i1,j1)))
             {
                 board[i2][j2].setChecker(board[i1][j1].getChecker());
                 board[i1][j1].setChecker(null);
@@ -386,12 +391,18 @@ public class Board extends AbstractBoard
             throw new IsNotChecker();
         }
     }
+    
+    public void endMove()
+    {
+        wasStep=false;
+        wasJump=false;
+    }
         
     @Override
-       public int getSize()
-        {
-            return 17;
-        }
+    public int getSize()
+    {
+        return 17;
+    }
         
     @Override
     public Field getField(int i, int j)

@@ -27,9 +27,10 @@ public abstract class AbstractBoard
         }
 
         public AbstractBoard() {}
-	public abstract ArrayList<Field> createListOfNeighbors(int i, int j);
+	public abstract ArrayList<Neighbors> createListOfNeighbors(int i, int j);
         public abstract int getSize();
         public abstract Field getField(int i, int j);
+        public abstract void endMove();
         //public abstract int MaxNumberNotEmptyField();
 }
 

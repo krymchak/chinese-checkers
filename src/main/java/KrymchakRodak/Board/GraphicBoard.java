@@ -140,6 +140,8 @@ public class GraphicBoard extends JPanel
                                     board.getField(i, j).setActive(true);
                                     aktiveI=i;
                                     aktiveJ=j;
+                                    System.out.println(i);
+                                    System.out.println(j);
                                     isFirstPressed=false;
                                 }
                             }
@@ -190,6 +192,13 @@ public class GraphicBoard extends JPanel
     }
     
     public void cancelMove() {
+        /*
+        * TODO
+        */
+        
+        
+        board.endMove();
+        isFirstPressed=true;
     }
 
     public void moveChecker(ArrayList<MoveInfo> moves) {
