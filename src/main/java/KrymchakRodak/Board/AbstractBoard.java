@@ -25,6 +25,8 @@ public abstract class AbstractBoard
                 throw new WrongNumberOfPlayers();
             }
         }
+
+        public AbstractBoard() {}
 	public abstract ArrayList<Field> createListOfNeighbors(int i, int j);
         public abstract int getSize();
         public abstract Field getField(int i, int j);

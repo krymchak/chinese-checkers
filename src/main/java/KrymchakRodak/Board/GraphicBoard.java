@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 public class GraphicBoard extends JPanel
 {
     AbstractBoard board;
-    Field [][] oldBoard;
     ArrayList<MoveInfo> moves = null;
     boolean isFirstPressed=true;
     int aktiveI;
@@ -68,11 +67,10 @@ public class GraphicBoard extends JPanel
                 }
             Y=Y+30;
         }
-        oldBoard = board.board;
-
     }
-    
-    	/** 
+
+
+    /**
 	* 
 	* @param g Graphics
 	*/
@@ -105,7 +103,7 @@ public class GraphicBoard extends JPanel
     }
 
 	/** 
-	* Wywoluje metode {@link Pole#doDrawing}
+	* Wywoluje metode doDrawing
 	* @param g Graphics
 	*/
     @Override
@@ -186,10 +184,25 @@ public class GraphicBoard extends JPanel
     public ArrayList<MoveInfo> getMoves() {
         return moves;
     }
-    public void newMove() {
-        this.oldBoard = board.board;
+    public void newTurn() {
         this.moves.clear();
         this.isFirstPressed = true;
+    }
+    
+    public void cancelMove() {
+    }
+
+    public void moveChecker(ArrayList<MoveInfo> moves) {
+        for(MoveInfo move : moves) {
+            try {
+                board.Step(move.getOldI(), move.getOldJ(), move.getNewI(), move.getNewJ());
+                repaint();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 
     public static void main(String args[])

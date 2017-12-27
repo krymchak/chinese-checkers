@@ -2,8 +2,12 @@ package KrymchakRodak.Server;
 
 import java.util.ArrayList;
 
+/**
+ * Singleton holding all GameLobby instances
+ */
 class Lobby {
     private static volatile Lobby instance;
+    //sizes of lobbies that will be created
     private static int lobbySizes[] = {2, 3, 4, 6};
     private ArrayList<GameLobby> lobbies;
 

@@ -87,9 +87,13 @@ public class Client {
                     int lobbyID = lobbyList.getSelectedIndex();
                     JFrame frame2 = new JFrame();
                     ClientGameData game = Client.connection.joinLobby(lobbyID);
+
                     game.getBoard().endMoveButton.addActionListener(al1 -> {
                         connection.move(game.getBoard().getMoves(), game.getGameID());
-                        frame2.disable();
+                    });
+
+                    game.getBoard().cancelMoveButton.addActionListener(al2 -> {
+                        game.getBoard().cancelMove();
                     });
 
                     frame2.add(game.getBoard());
@@ -97,8 +101,11 @@ public class Client {
                     frame2.setSize(20*40,20*40);
                     frame2.setVisible(true);
                     frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
                     //while (game.gameActive) {
-                        //get move send message to server, wait for turn
+                      //  if (!frame2.isEnabled()) {
+                        //    game.getBoard().moveChecker(connection.waitForTurn());
+                        //}
                     //}
 
                 });

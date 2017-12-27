@@ -8,7 +8,7 @@ import java.awt.*;
 import java.lang.reflect.Field;
 
 /**
- * Class containing graphical board component
+ * Client's object used to monitor game state
  */
 
 public class ClientGameData {

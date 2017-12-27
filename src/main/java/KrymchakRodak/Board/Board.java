@@ -17,6 +17,8 @@ public class Board extends AbstractBoard
     public Board(int numberOfPlayers) throws WrongNumberOfPlayers{
         super(numberOfPlayers);
     }
+
+    public Board() {}
     
     @Override
    /*

@@ -2,6 +2,7 @@ package KrymchakRodak.Client;
 
 import KrymchakRodak.Board.MoveInfo;
 import KrymchakRodak.Game.ClientGameData;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -40,7 +41,8 @@ public class ClientConnection {
         ObjectNode node = mapper.createObjectNode();
         node.put("RequestType", "MOVE_CHECKER");
         node.put("GameID", gameID);
-        //node.putArray("Moves").addAll(moveArray);
+        ArrayNode moveArray = mapper.valueToTree(moves);
+        node.putArray("Moves").addAll(moveArray);
 
         out.println(node.toString());
         out.flush();
@@ -54,6 +56,19 @@ public class ClientConnection {
         out.flush();
 
         return new ClientGameData(waitForResponse());
+    }
+
+    ArrayList<MoveInfo> waitForTurn() {
+        JsonNode node = waitForResponse();
+        System.out.println(node.toString());
+        ArrayList<MoveInfo> moves = null;
+        try {
+            moves = mapper.readValue(node.get("Moves").toString(), new TypeReference<ArrayList<MoveInfo>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return moves;
     }
 
     private JsonNode waitForResponse() {

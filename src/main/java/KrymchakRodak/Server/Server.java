@@ -26,7 +26,12 @@ public class Server {
 
 
     }
-    static ServerGameData getGame() {
+    static ServerGameData getGame(int gameID) {
+        for (ServerGameData gameData : games) {
+            if (gameData.getGameID() == gameID) {
+                return gameData;
+            }
+        }
         return null;
     }
     static void addGame(ServerGameData game) {
