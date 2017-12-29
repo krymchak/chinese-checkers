@@ -10,9 +10,10 @@ import java.util.LinkedList;
  * Object used by Server to keep track of a game
  */
 public class ServerGameData {
-    private Board board;
+    private Board board = null;
     private LinkedList<Client> players = null;
-    private int gameID;
+    private int gameID = 0;
+    private int activePlayer = 0;
 
     public ServerGameData(LinkedList<Client> players, int gameSize, int gameID) {
         try {
@@ -30,5 +31,15 @@ public class ServerGameData {
 
     public LinkedList<Client> getPlayers() {
         return this.players;
+    }
+
+    public Client getPlayerToNotify() {
+        return this.players.get(getActivePlayer());
+    }
+
+    private int getActivePlayer() {
+        this.activePlayer = ++this.activePlayer % this.players.size();
+
+        return this.activePlayer;
     }
 }

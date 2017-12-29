@@ -24,6 +24,7 @@ public class GraphicBoard extends JPanel
 {
     AbstractBoard board;
     ArrayList<MoveInfo> moves = null;
+    private boolean activeTurn = false;
     boolean isFirstPressed=true;
     int aktiveI;
     int aktiveJ;
@@ -39,6 +40,8 @@ public class GraphicBoard extends JPanel
 	this.addMouseListener(handler);
         endMoveButton = new Button("End of move");
         cancelMoveButton = new Button("Reset of move");
+        endMoveButton.setEnabled(false);
+        cancelMoveButton.setEnabled(false);
         this.add(endMoveButton);
         this.add(cancelMoveButton);
         setBackground(Color.WHITE);
@@ -114,73 +117,58 @@ public class GraphicBoard extends JPanel
         doDrawing(g);
     }
     
-    private class MyMouseHandler extends MouseAdapter 
-    {
+    private class MyMouseHandler extends MouseAdapter {
         @Override
-	public void mousePressed(MouseEvent e) 
-        {
-            if ((SwingUtilities.isLeftMouseButton(e)))
-            {
-                if (isFirstPressed)
-                {
-                    int x = e.getX();
-                    int y = e.getY(); 
-                    for (int i=0; i<board.getSize(); i++)
-                    {
-                        for (int j=0; j<board.getSize(); j++)
-                        {
-                            if (board.getField(i, j).isChecker())
-                            {
-                                if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
-                                {
-                                     board.getField(i, j).setActive(false);
-                                }
-                                else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y) && board.getField(i, j).getChecker().getColor()==color)
-                                {
-                                    board.getField(i, j).setActive(true);
-                                    aktiveI=i;
-                                    aktiveJ=j;
-                                    System.out.println(i);
-                                    System.out.println(j);
-                                    isFirstPressed=false;
+        public void mousePressed(MouseEvent e) {
+            if (activeTurn) {
+                if ((SwingUtilities.isLeftMouseButton(e))) {
+                    if (isFirstPressed) {
+                        int x = e.getX();
+                        int y = e.getY();
+                        for (int i = 0; i < board.getSize(); i++) {
+                            for (int j = 0; j < board.getSize(); j++) {
+                                if (board.getField(i, j).isChecker()) {
+                                    if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive()) {
+                                        board.getField(i, j).setActive(false);
+                                    } else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x, y) && board.getField(i, j).getChecker().getColor() == color) {
+                                        board.getField(i, j).setActive(true);
+                                        aktiveI = i;
+                                        aktiveJ = j;
+                                        System.out.println(i);
+                                        System.out.println(j);
+                                        isFirstPressed = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                }
-                else
-                {
-                    int x = e.getX();
-                    int y = e.getY(); 
-                    for (int i=0; i<board.getSize(); i++)
-                    {
-                        for (int j=0; j<board.getSize(); j++)
-                        {
-                            if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive())
-                            {
-                                 board.getField(i, j).setActive(false);
-                            }
-                            else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x,y))
-                            {
-                                try {
-                                    board.Step(aktiveI, aktiveJ, i, j);
-                                    moves.add(new MoveInfo(aktiveI, aktiveJ, i, j));
-                                    aktiveI=i;
-                                    aktiveJ=j;
-                                    board.getField(aktiveI, aktiveJ).setActive(true);
-                                } catch (ImpossibleStep ex) {
-                                    board.getField(aktiveI, aktiveJ).setActive(true);
-                                } catch (IsNotChecker ex) {
+                    } else {
+                        int x = e.getX();
+                        int y = e.getY();
+                        for (int i = 0; i < board.getSize(); i++) {
+                            for (int j = 0; j < board.getSize(); j++) {
+                                if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive()) {
+                                    board.getField(i, j).setActive(false);
+                                } else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x, y)) {
+                                    try {
+                                        board.Step(aktiveI, aktiveJ, i, j);
+                                        moves.add(new MoveInfo(aktiveI, aktiveJ, i, j));
+                                        aktiveI = i;
+                                        aktiveJ = j;
+                                        board.getField(aktiveI, aktiveJ).setActive(true);
+                                    } catch (ImpossibleStep ex) {
+                                        board.getField(aktiveI, aktiveJ).setActive(true);
+                                    } catch (IsNotChecker ex) {
+                                    }
                                 }
                             }
                         }
+                        //isFirstPressed=true;
                     }
-                    //isFirstPressed=true;
+                    repaint();
                 }
-                repaint();
-            }
-                    
+
         }
+    }
     }
 
     public ArrayList<MoveInfo> getMoves() {
@@ -189,19 +177,36 @@ public class GraphicBoard extends JPanel
     public void newTurn() {
         this.moves.clear();
         this.isFirstPressed = true;
+        board.endMove();
+        setActiveTurn(true);
     }
-    
+
     public void cancelMove() {
-        /*
-        * TODO
-        */
-        
-        
+        int stepNumber = this.moves.size() - 1;
+
+        if (board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).isActive()) {
+            board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).setActive(false);
+        }
+
+        for(; stepNumber >= 0; stepNumber--) {
+            board.endMove();
+            MoveInfo move = this.moves.get(stepNumber);
+            try {
+                board.Step(move.getNewI(), move.getNewJ(), move.getOldI(), move.getOldJ());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.moves.clear();
         board.endMove();
         isFirstPressed=true;
+        repaint();
     }
 
     public void moveChecker(ArrayList<MoveInfo> moves) {
+        board.endMove();
+
         for(MoveInfo move : moves) {
             try {
                 board.Step(move.getOldI(), move.getOldJ(), move.getNewI(), move.getNewJ());
@@ -209,9 +214,26 @@ public class GraphicBoard extends JPanel
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         }
+    }
+
+    public void unmarkActive() {
+        int lastStep = moves.size() - 1;
+
+        MoveInfo step = moves.get(lastStep);
+
+        if (board.getField(step.getNewI(), step.getNewJ()).isActive()) {
+            board.getField(step.getNewI(), step.getNewJ()).setActive(false);
+            repaint();
+        }
+    }
+
+    public void setActiveTurn(boolean bool) {
+        this.activeTurn = bool;
+    }
+
+    public boolean isActiveTurn() {
+        return this.activeTurn;
     }
 
     public static void main(String args[])

@@ -34,16 +34,27 @@ class ServerCommunication {
     }
 
     //let connected users know how many people are in lobby
-    static void updateLobby(LinkedList<Client> players, ArrayList<String> names, int lobbyID) {
+    static void updateLobby(LinkedList<Client> players, String name) {
         ObjectNode jsonNode = mapper.createObjectNode();
+
         jsonNode.put("Response", "UPDATE_LOBBY");
-        jsonNode.put("LobbyID", lobbyID);
+        jsonNode.put("NewUser", name);
+
+        players.forEach(p ->
+            p.sendMessage(jsonNode.toString())
+        );
+    }
+
+    static void joinLobby(Client client, ArrayList<String> names) {
+        ObjectNode jsonNode = mapper.createObjectNode();
+
+        jsonNode.put("Response", "JOIN_SUCCESS");
+
         ArrayNode usersArray = mapper.valueToTree(names);
+
         jsonNode.putArray("Users").addAll(usersArray);
 
-        players.forEach(p -> {
-            p.sendMessage(jsonNode.toString());
-        });
+        client.sendMessage(jsonNode.toString());
     }
 
     //start game
@@ -87,28 +98,43 @@ class ServerCommunication {
 
         for (Client client: players) {
             ObjectNode jsonNode = mapper.createObjectNode();
-            jsonNode.put("Response", "START_GAME");
+            jsonNode.put("Response", "GAME_READY");
             jsonNode.put("GameSize", gameSize);
             jsonNode.put("CheckersColor", checkerColor.get(players.indexOf(client)));
             jsonNode.put("FirstTurn", players.getFirst().equals(client));
             jsonNode.put("GameID", gameID);
             client.sendMessage(jsonNode.toString());
         }
-        Server.addGame(new ServerGameData(players, gameSize, gameID));
+        Server.addGame(new ServerGameData(players, gameSize, gameID++));
 
     }
 
     //notify clients about new move
-    static void moveChecker(int gameID, ArrayList<MoveInfo> moves) {
+    void moveChecker(int gameID, Client sender, ArrayList<MoveInfo> moves) {
         ObjectNode jsonNode = mapper.createObjectNode();
-        jsonNode.put("Response", "MOVE_CHECKER");
+
+        jsonNode.put("Response", "UPDATE_BOARD");
+
         ArrayNode moveArray = mapper.valueToTree(moves);
         jsonNode.putArray("Moves").addAll(moveArray);
-        System.out.println(Server.getGame(0).getPlayers().size());
-        for (Client client : Server.getGame(gameID).getPlayers()) {
-            System.out.println(client.getUsername());
-            client.sendMessage(jsonNode.toString());
-        }
 
+        LinkedList<Client> players = Server.getGame(gameID).getPlayers();
+
+        for (Client client : players)  {
+            if(players.indexOf(client) != players.indexOf(sender)) {
+                client.sendMessage(jsonNode.toString());
+            }
+        }
+    }
+
+    /*
+    notify player of new turn
+     */
+    static void newTurn(int gameID) {
+        ObjectNode jsonNode = mapper.createObjectNode();
+
+        jsonNode.put("Response", "TURN_ACTIVE");
+
+        Server.getGame(gameID).getPlayerToNotify().sendMessage(jsonNode.toString());
     }
 }

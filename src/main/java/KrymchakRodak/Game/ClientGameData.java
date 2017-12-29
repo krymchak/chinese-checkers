@@ -21,10 +21,7 @@ public class ClientGameData {
         return this.graphicBoard;
     }
 
-    /**
-     *
-     * @return
-     */
+
     public boolean isActive() {
         return active;
     }
@@ -47,6 +44,7 @@ public class ClientGameData {
             Color checkerColor = (Color) field.get(null);
             this.graphicBoard = new GraphicBoard(new CreatorBoard().createBoard(numberOfPlayers), checkerColor);
             this.active = firstTurn;
+            this.graphicBoard.setActiveTurn(firstTurn);
             this.gameID = node.get("GameID").asInt();
         } catch (Exception e) {
             e.printStackTrace();

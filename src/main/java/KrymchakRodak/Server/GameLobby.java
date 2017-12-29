@@ -24,12 +24,18 @@ class GameLobby {
      * @param player player to be added to list of players waiting in lobby
      */
    void addPlayer(Client player) {
-        this.players.add(player);
+       if (getPlayerCount() > 0) {
+           ServerCommunication.updateLobby(getPlayers(), player.getUsername());
+       }
+
+       this.players.add(player);
+
+       ServerCommunication.joinLobby(player, getUsernames());
+
         if (enoughPlayers()) {
             ServerCommunication.startGame(getPlayers(), getLobbyID());
             resetLobby();
         }
-        //ServerCommunication.updateLobby(getPlayers(), getUsernames(), getLobbyID());
     }
 
     private int getPlayerCount() {

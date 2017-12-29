@@ -21,9 +21,11 @@ public class Client extends Thread {
     private PrintWriter out;
     private Socket client;
     private String username;
+    private ServerCommunication communication;
 
     Client(Socket clientSocket) {
         this.client = clientSocket;
+        this.communication = new ServerCommunication();
     }
 
     @Override
@@ -94,7 +96,8 @@ public class Client extends Thread {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                ServerCommunication.moveChecker(gameID, moves);
+                this.communication.moveChecker(gameID, this, moves);
+                ServerCommunication.newTurn(gameID);
 
         }
 
