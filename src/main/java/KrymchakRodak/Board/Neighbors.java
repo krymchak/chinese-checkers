@@ -13,10 +13,14 @@ public class Neighbors
 {
     Field field;
     boolean isJump;
-    public Neighbors(Field field, boolean isJump)
+    int i;
+    int j;
+    public Neighbors(Field field, boolean isJump, int i, int j)
     {
         this.field=field;
         this.isJump=isJump;
+        this.i=i;
+        this.j=j;
     }
     public Field getField()
     {
@@ -26,5 +30,15 @@ public class Neighbors
     public boolean isJump()
     {
         return isJump;        
+    }
+    
+        public int getI()
+    {
+        return i;
+    }
+    
+    public int getJ()
+    {
+        return j;
     }
 }

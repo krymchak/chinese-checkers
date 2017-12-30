@@ -1,5 +1,6 @@
 package KrymchakRodak.Board;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +32,7 @@ public abstract class AbstractBoard
         public abstract int getSize();
         public abstract Field getField(int i, int j);
         public abstract void endMove();
+        public abstract boolean win(Color color);
         //public abstract int MaxNumberNotEmptyField();
 }
 

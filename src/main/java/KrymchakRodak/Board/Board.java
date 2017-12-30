@@ -287,64 +287,64 @@ public class Board extends AbstractBoard
         if (i>0 && board[i-1][j].IsNotEmpty() &&!board[i-1][j].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-1][j].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i-1][j], false));
+                ListOfNeighbors.add(new Neighbors(board[i-1][j], false, i-1, j));
         }
         else if (i>1 && board[i-2][j].IsNotEmpty() && !board[i-2][j].isChecker())
         {
-            if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i-2][j].getChecker().getEndTriangle() != board[i-1][j].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i-2][j], true));
+            if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-1][j].getTriangle()))
+                ListOfNeighbors.add(new Neighbors(board[i-2][j], true, i-2, j));
         }
         if (i>0 && j>0 && board[i-1][j-1].IsNotEmpty() && !board[i-1][j-1].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-1][j-1].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i-1][j-1],false));
+                ListOfNeighbors.add(new Neighbors(board[i-1][j-1],false, i-1, j-1));
         }
         else if (i>1 && j>2 && board[i-2][j-2].IsNotEmpty() && !board[i-2][j-2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i-2][j-2].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i-2][j-2], true));
+                ListOfNeighbors.add(new Neighbors(board[i-2][j-2], true, i-2, j-2));
         }
         if (j>0 && board[i][j-1].IsNotEmpty() && !board[i][j-1].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j-1].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i][j-1], false));
+                ListOfNeighbors.add(new Neighbors(board[i][j-1], false, i, j-1));
         }
         else if (j>1 && board[i][j-2].IsNotEmpty() && !board[i][j-2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j-2].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i][j-2], true));
+                ListOfNeighbors.add(new Neighbors(board[i][j-2], true, i, j-2));
         }
         if (i<16 && board[i+1][j].IsNotEmpty() && !board[i+1][j].isChecker() && !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+1][j].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i+1][j], false));
+                ListOfNeighbors.add(new Neighbors(board[i+1][j], false, i+1, j));
         }
         else if (i<15 && board[i+2][j].IsNotEmpty() && !board[i+2][j].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+2][j].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i+2][j], true));
+                ListOfNeighbors.add(new Neighbors(board[i+2][j], true, i+2, j));
 
         }
         if (i< 16 && j<16 && board[i+1][j+1].IsNotEmpty() && !board[i+1][j+1].isChecker()&& !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+1][j+1].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i+1][j+1], false));
+                ListOfNeighbors.add(new Neighbors(board[i+1][j+1], false, i+1, j+1));
         }
         else if (i<15 && j<15 && board[i+2][j+2].IsNotEmpty() &&!board[i+2][j+2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i+2][j+2].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i+2][j+2], true));
+                ListOfNeighbors.add(new Neighbors(board[i+2][j+2], true, i+2, j+2));
 
         }
         if (j<16 && board[i][j+1].IsNotEmpty() && !board[i][j+1].isChecker()&& !wasJump)
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j+1].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i][j+1], false));
+                ListOfNeighbors.add(new Neighbors(board[i][j+1], false, i, j+1));
         }
         else if (j<15 &&  board[i][j+2].IsNotEmpty() && !board[i][j+2].isChecker())
         {
             if (!(board[i][j].getChecker().getEndTriangle() == board[i][j].getTriangle() && board[i][j].getChecker().getEndTriangle() != board[i][j+2].getTriangle()))
-                ListOfNeighbors.add(new Neighbors(board[i][j+2], true));
+                ListOfNeighbors.add(new Neighbors(board[i][j+2], true, i, j+2));
         }
         return ListOfNeighbors;
     }
@@ -408,6 +408,25 @@ public class Board extends AbstractBoard
     public Field getField(int i, int j)
     {
         return board[i][j];
+    }
+    
+    public boolean win(Color color)
+    {
+        int counter=0;
+        for (int i=0; i<17; i++)
+	{
+            for (int j=0; j<17; j++)
+            {
+                if (board[i][j].isChecker() && board[i][j].getChecker().getColor()==color && board[i][j].getTriangle()==board[i][j].getChecker().getEndTriangle())
+                {
+                    counter++;
+                }
+            }
+        }
+        if (counter==10)
+            return true;
+        else
+            return false;
     }
     
     /*@Override
