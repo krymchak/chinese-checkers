@@ -438,7 +438,7 @@ public class Board extends AbstractBoard
 	public static void main(String args[])
 	{
             try {
-                Board a = new Board(6);
+                Board a = new Board(4);
                 try {
                     a.Step(4, 3, 4, 4);
                 } catch (ImpossibleStep ex) {

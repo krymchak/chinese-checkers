@@ -14,7 +14,7 @@ import java.awt.Color;
  */
 public class CreatorBot extends AbstractCreatorBot{
     @Override
-    public AbstractBot createBot(AbstractBoard board, Color color)
+    public Bot createBot(AbstractBoard board, Color color)
     {
         return new Bot(board, color);
     }

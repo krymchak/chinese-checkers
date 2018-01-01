@@ -34,43 +34,43 @@ public class BoardTest {
     "    ...........  \n" +
     "    ............ \n" +
     "    .............\n" +
-    "         RRRR    \n" +
-    "          RRR    \n" +
-    "           RR    \n" +
-    "            R    \n";
+    "         GGGG    \n" +
+    "          GGG    \n" +
+    "           GG    \n" +
+    "            G    \n";
     String boardForThree=
     "    .            \n" +
     "    ..           \n" +
     "    ...          \n" +
     "    ....         \n" +
-    "BBBB.....OOOO    \n" +
-    " BBB......OOO    \n" +
-    "  BB.......OO    \n" +
-    "   B........O    \n" +
+    "BBBB.....RRRR    \n" +
+    " BBB......RRR    \n" +
+    "  BB.......RR    \n" +
+    "   B........R    \n" +
     "    .........    \n" +
     "    ..........   \n" +
     "    ...........  \n" +
     "    ............ \n" +
     "    .............\n" +
-    "         RRRR    \n" +
-    "          RRR    \n" +
-    "           RR    \n" +
-    "            R    \n";
+    "         GGGG    \n" +
+    "          GGG    \n" +
+    "           GG    \n" +
+    "            G    \n";
     
     String boardForFour=
     "    .            \n" +
     "    ..           \n" +
     "    ...          \n" +
     "    ....         \n" +
-    "GGGG.....OOOO    \n" +
-    " GGG......OOO    \n" +
-    "  GG.......OO    \n" +
-    "   G........O    \n" +
+    "OOOO.....RRRR    \n" +
+    " OOO......RRR    \n" +
+    "  OO.......RR    \n" +
+    "   O........R    \n" +
     "    .........    \n" +
-    "    B........R   \n" +
-    "    BB.......RR  \n" +
-    "    BBB......RRR \n" +
-    "    BBBB.....RRRR\n" +
+    "    G........B   \n" +
+    "    GG.......BB  \n" +
+    "    GGG......BBB \n" +
+    "    GGGG.....BBBB\n" +
     "         ....    \n" +
     "          ...    \n" +
     "           ..    \n" +
