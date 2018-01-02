@@ -69,6 +69,16 @@ class ClientConnection {
         this.out.flush();
     }
 
+    /*void createBotGame(int lobbyID) {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "START_BOT");
+        node.put("LobbyID", lobbyID);
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }*/
+
     /*
     wait for message from server and create JsonNode from received String
      */

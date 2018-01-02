@@ -142,4 +142,39 @@ class RequestHandler {
 
         this.clientUI.updateGraphicBoard(moves);
     }
+
+    void startBotGame(int selectedID) {
+        ArrayList<String> checkerColor = new ArrayList<>();
+
+        switch (selectedID) {
+            case 0:
+                checkerColor.add("ORANGE");
+                checkerColor.add("GREEN");
+                this.clientUI.createBotGame(2, checkerColor);
+                break;
+            case 1:
+                checkerColor.add("RED");
+                checkerColor.add("GREEN");
+                checkerColor.add("BLUE");
+                this.clientUI.createBotGame(3, checkerColor);
+                break;
+            case 2:
+                checkerColor.add("RED");
+                checkerColor.add("BLUE");
+                checkerColor.add("GREEN");
+                checkerColor.add("ORANGE");
+                this.clientUI.createBotGame(4, checkerColor);
+                break;
+            case 3:
+                checkerColor.add("ORANGE");
+                checkerColor.add("RED");
+                checkerColor.add("BLUE");
+                checkerColor.add("GREEN");
+                checkerColor.add("CYAN");
+                checkerColor.add("PINK");
+                this.clientUI.createBotGame(6, checkerColor);
+                break;
+        }
+
+    }
 }

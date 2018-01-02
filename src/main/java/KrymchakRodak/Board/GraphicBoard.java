@@ -174,6 +174,11 @@ public class GraphicBoard extends JPanel
     public ArrayList<MoveInfo> getMoves() {
         return moves;
     }
+
+    public AbstractBoard getBoard() {
+        return board;
+    }
+
     public void newTurn() {
         this.moves.clear();
         this.isFirstPressed = true;

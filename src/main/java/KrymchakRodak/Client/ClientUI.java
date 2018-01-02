@@ -1,10 +1,14 @@
 package KrymchakRodak.Client;
 
+import KrymchakRodak.Board.AbstractBoard;
+import KrymchakRodak.Board.CreatorBoard;
 import KrymchakRodak.Board.GraphicBoard;
 import KrymchakRodak.Board.MoveInfo;
+import KrymchakRodak.Bot.Bot;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class ClientUI extends Thread {
@@ -22,8 +26,10 @@ public class ClientUI extends Thread {
     private Label waitLabel = null;
     private JButton loginButton = null;
     private JButton joinButton = null;
+    private JButton botButton = null;
     private JComboBox<String> lobbyList = null;
     private CardLayout cardLayout = null;
+    private ArrayList<Bot> bots = null;
 
     /*
     Default constructor, creates new RequestHandler instance
@@ -74,18 +80,23 @@ public class ClientUI extends Thread {
         String[] lobbyStrings = {"2 Players", "3 Players", "4 Players", "6 Players"};
         this.lobbyList = new JComboBox<>(lobbyStrings);
 
-        this.joinButton = new JButton("Join Lobby");
+        this.joinButton = new JButton("Play Online");
+        this.botButton = new JButton("Play vs. AI");
 
         this.lobbyPanel = new JPanel();
         this.lobbyPanel.setLayout(new GridBagLayout());
 
-        this.gbc.gridx = 0;
+        this.gbc.gridx = 1;
         this.gbc.gridy = 0;
         this.lobbyPanel.add(this.lobbyList, gbc);
 
         this.gbc.gridx = 0;
         this.gbc.gridy = 1;
         this.lobbyPanel.add(this.joinButton, gbc);
+
+        this.gbc.gridx = 1;
+        this.gbc.gridy = 1;
+        this.lobbyPanel.add(this.botButton, gbc);
         this.panelCards.add(this.lobbyPanel, "LOBBY");
 
         this.waitLabel = new Label("Waiting for other players...");
@@ -130,6 +141,11 @@ public class ClientUI extends Thread {
                this.requestHandler.requestJoinLobby(this.lobbyList.getSelectedIndex())
            ).start()
        );
+
+       this.botButton.addActionListener(t ->
+       new Thread(() ->
+        this.requestHandler.startBotGame(this.lobbyList.getSelectedIndex())
+           ).start());
     }
 
     /*
@@ -217,6 +233,31 @@ public class ClientUI extends Thread {
 
     }
 
+    private void addBotBoardListeners() {
+        this.graphicBoard.endMoveButton.addActionListener(al -> {
+            new Thread(() -> {
+                this.graphicBoard.cancelMoveButton.setEnabled(false);
+                this.graphicBoard.endMoveButton.setEnabled(false);
+                this.graphicBoard.unmarkActive();
+
+                botsMove();
+            }).start();
+
+
+        });
+
+        this.graphicBoard.cancelMoveButton.addActionListener(al ->
+                this.graphicBoard.cancelMove());
+    }
+
+    private void botsMove() {
+        for (Bot bot : this.bots) {
+            System.out.println("Bot Move");
+            bot.moveBot();
+        }
+        startNewTurn();
+    }
+
     /*
     update GraphicBoard with new moves
      */
@@ -233,6 +274,40 @@ public class ClientUI extends Thread {
         this.graphicBoard.newTurn();
         this.graphicBoard.cancelMoveButton.setEnabled(true);
         this.graphicBoard.endMoveButton.setEnabled(true);
+    }
+
+    void createBotGame(int gameSize, ArrayList<String> checkerColor) {
+
+
+        Field field;
+        Color color;
+
+        bots = new ArrayList<>();
+
+        try {
+            field = Color.class.getField(checkerColor.get(0));
+            color = (Color) field.get(null);
+            this.graphicBoard = new GraphicBoard(new CreatorBoard().createBoard(gameSize), color);
+
+            for (int i = 1; i < gameSize; i++) {
+                field = Color.class.getField(checkerColor.get(i));
+                color = (Color) field.get(null);
+
+                bots.add(new Bot( this.graphicBoard.getBoard(), color));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addBotBoardListeners();
+
+
+        this.gameFrame = new JFrame();
+
+        this.gameFrame.add(this.graphicBoard);
+        this.gameFrame.setSize(17*40,17*40);
+        this.gameFrame.setVisible(true);
+        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        startNewTurn();
     }
 
 }

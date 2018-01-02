@@ -123,7 +123,7 @@ public class Bot extends AbstractBot
             Bot bot4 = new Bot(board, Color.GREEN);
             Bot bot5 = new Bot(board, Color.CYAN);
             Bot bot6 = new Bot(board, Color.PINK);
-            System.out.println("Начал");
+            System.out.println("");
             for(int i=0; i<300; i++)
             {
                 bot1.moveBot();
