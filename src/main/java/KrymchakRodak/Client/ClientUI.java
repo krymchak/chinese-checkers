@@ -1,9 +1,6 @@
 package KrymchakRodak.Client;
 
-import KrymchakRodak.Board.AbstractBoard;
-import KrymchakRodak.Board.CreatorBoard;
-import KrymchakRodak.Board.GraphicBoard;
-import KrymchakRodak.Board.MoveInfo;
+import KrymchakRodak.Board.*;
 import KrymchakRodak.Bot.Bot;
 
 import javax.swing.*;
@@ -235,6 +232,7 @@ public class ClientUI extends Thread {
 
     private void addBotBoardListeners() {
         this.graphicBoard.endMoveButton.addActionListener(al -> {
+            System.out.println(((Board) this.graphicBoard.getBoard()).write());
             new Thread(() -> {
                 this.graphicBoard.cancelMoveButton.setEnabled(false);
                 this.graphicBoard.endMoveButton.setEnabled(false);
@@ -252,8 +250,9 @@ public class ClientUI extends Thread {
 
     private void botsMove() {
         for (Bot bot : this.bots) {
-            System.out.println("Bot Move");
+            startNewTurn();
             bot.moveBot();
+            System.out.println(((Board) this.graphicBoard.getBoard()).write());
         }
         startNewTurn();
     }
