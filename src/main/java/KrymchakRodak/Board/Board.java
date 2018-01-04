@@ -20,7 +20,6 @@ public class Board extends AbstractBoard
         super(numberOfPlayers);
     }
 
-    public Board() {}
     
     @Override
    /*
@@ -435,23 +434,5 @@ public class Board extends AbstractBoard
         return 13;
     }*/
         
-	public static void main(String args[])
-	{
-            try {
-                Board a = new Board(4);
-                try {
-                    a.Step(4, 3, 4, 4);
-                } catch (ImpossibleStep ex) {
-                    System.out.print("ImpossibleStep");
-                } catch (IsNotChecker ex) {
-                    System.out.print("IsNotChecker");
-                }
-                //a.Step(4, 4, 4, 5);
-                System.out.print(a.write());
-            } 
-            catch (WrongNumberOfPlayers ex) {
-                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-            }
-	}
 }
     

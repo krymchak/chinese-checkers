@@ -32,6 +32,7 @@ public class GraphicBoard extends JPanel
     public Button endMoveButton, cancelMoveButton;
     public GraphicBoard(AbstractBoard board, Color color)
     {
+        String colorOfPlayer="";
         this.board=board;
         this.color=color;
         this.moves = new ArrayList<>();
@@ -44,6 +45,19 @@ public class GraphicBoard extends JPanel
         cancelMoveButton.setEnabled(false);
         this.add(endMoveButton);
         this.add(cancelMoveButton);
+        if (color==Color.RED)
+            colorOfPlayer="Red";
+        if (color==Color.ORANGE)
+            colorOfPlayer="Orange";
+        if (color==Color.PINK)
+            colorOfPlayer="Pink";
+        if (color==Color.BLUE)
+            colorOfPlayer="Blue";
+        if (color==Color.GREEN)
+            colorOfPlayer="Green";
+        if (color==Color.CYAN)
+            colorOfPlayer="Cyan";
+        this.add (new JLabel(colorOfPlayer));
         setBackground(Color.WHITE);
         setSize(40*board.getSize(),40*board.getSize());
         int center=40*board.getSize()/2;
@@ -111,7 +125,7 @@ public class GraphicBoard extends JPanel
 	*/
     @Override
     public void paintComponent(Graphics g) 
-	{
+    {
         super.paintComponent(g);
         
         doDrawing(g);
@@ -189,7 +203,7 @@ public class GraphicBoard extends JPanel
     public void cancelMove() {
         int stepNumber = this.moves.size() - 1;
 
-        if (board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).isActive()) {
+        if (stepNumber>= 0 && board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).isActive()) {
             board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).setActive(false);
         }
 
@@ -225,11 +239,13 @@ public class GraphicBoard extends JPanel
     public void unmarkActive() {
         int lastStep = moves.size() - 1;
 
-        MoveInfo step = moves.get(lastStep);
-
-        if (board.getField(step.getNewI(), step.getNewJ()).isActive()) {
-            board.getField(step.getNewI(), step.getNewJ()).setActive(false);
-            repaint();
+        if (lastStep>=0)
+        {
+            MoveInfo step = moves.get(lastStep);
+            if (board.getField(step.getNewI(), step.getNewJ()).isActive()) {
+                board.getField(step.getNewI(), step.getNewJ()).setActive(false);
+                repaint();
+            }
         }
     }
 
@@ -241,17 +257,4 @@ public class GraphicBoard extends JPanel
         return this.activeTurn;
     }
 
-    public static void main(String args[])
-    {
-        JFrame frame = new JFrame();
-        try {
-            GraphicBoard pole = new GraphicBoard(new CreatorBoard().createBoard(2), Color.GREEN);
-            frame.add(pole);
-            frame.setSize(17*40,17*40);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        } catch (WrongNumberOfPlayers ex) {
-            Logger.getLogger(GraphicBoard.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}
 }

@@ -183,4 +183,16 @@ public class BoardTest {
             Board board = new Board(6);
             board.Step(5, 1, 5, 0);
     }
+    
+    @Test
+    public void testGetSize() throws WrongNumberOfPlayers{
+            Board board = new Board(6);
+           assertEquals(17, board.getSize());
+    }
+    
+    @Test
+    public void testEndMove() throws WrongNumberOfPlayers{
+            Board board = new Board(6);
+            board.endMove();
+    }
 }

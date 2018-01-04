@@ -7,6 +7,7 @@ package KrymchakRodak;
 
 import KrymchakRodak.Board.Board;
 import KrymchakRodak.Board.CreatorBoard;
+import KrymchakRodak.Board.WrongNumberOfPlayers;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,6 +29,13 @@ public class CreatorBoardTest {
         CreatorBoard instance = new CreatorBoard();
         Board result = instance.createBoard(4);
         assertNotNull(result);
+    }
+    
+    @Test (expected = WrongNumberOfPlayers.class)
+    public void testWrongNumberOfPlayers() throws Exception {
+        CreatorBoard instance = new CreatorBoard();
+        Board result = instance.createBoard(5);
+
     }
     
 }

@@ -75,8 +75,21 @@ public class Bot extends AbstractBot
        ArrayList <Neighbors> listOfNeighbors=new ArrayList<>();
        while (listOfNeighbors.isEmpty())
         {
-            j = random.nextInt(listOfCheckers.size());
-            listOfNeighbors = board.createListOfNeighbors(listOfCheckers.get(j).getI(), listOfCheckers.get(j).getJ());
+            //j = random.nextInt(listOfCheckers.size());
+            
+            //System.out.println(j);
+            j=1;
+            System.out.println("Фишка:");
+            System.out.println(listOfCheckers.get(j).getI());
+            System.out.println(listOfCheckers.get(j).getJ());
+            //listOfNeighbors = board.createListOfNeighbors(listOfCheckers.get(j).getI(), listOfCheckers.get(j).getJ());
+            listOfNeighbors = board.createListOfNeighbors(13, 10);
+
+            for (int k=0; k<listOfNeighbors.size(); k++)
+            {
+                System.out.println(listOfNeighbors.get(k).getI());
+                System.out.println(listOfNeighbors.get(k).getJ());
+            }
         }
         for (int i=0; i<listOfNeighbors.size(); i++)
         {
@@ -87,8 +100,6 @@ public class Bot extends AbstractBot
                 maxDistance.setNeighbors(listOfNeighbors.get(i));
             }
         }
-        System.out.println(listOfCheckers.get(j).getI());
-        System.out.println(listOfCheckers.get(j).getJ());
        return maxDistance;
     }
     
@@ -113,33 +124,4 @@ public class Bot extends AbstractBot
         }
     }
     
-    public static void main(String args[])
-    {
-        try {
-            Board board = new Board(6);
-            Bot bot1 = new Bot(board, Color.ORANGE);
-            Bot bot2 = new Bot(board, Color.RED);
-            Bot bot3 = new Bot(board, Color.BLUE);
-            Bot bot4 = new Bot(board, Color.GREEN);
-            Bot bot5 = new Bot(board, Color.CYAN);
-            Bot bot6 = new Bot(board, Color.PINK);
-            System.out.println("");
-            for(int i=0; i<300; i++)
-            {
-                bot1.moveBot();
-                bot2.moveBot();
-                bot3.moveBot();
-                bot4.moveBot();
-                bot5.moveBot();
-                bot6.moveBot();
-            }
-            
-            System.out.println(board.write());
-           
-            
-        } catch (WrongNumberOfPlayers ex) {
-            Logger.getLogger(Bot.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
 }

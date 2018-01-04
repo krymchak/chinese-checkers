@@ -59,7 +59,8 @@ public class BotTest {
     public void testMoveBot() {
         try {
             Bot instance = new Bot(new Board(2), Color.ORANGE);
-            instance.moveBot();
+            for (int i=0; i<10; i++)
+                instance.moveBot();
         } catch (WrongNumberOfPlayers ex) {
             Logger.getLogger(BotTest.class.getName()).log(Level.SEVERE, null, ex);
         }
