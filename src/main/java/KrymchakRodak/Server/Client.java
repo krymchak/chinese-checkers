@@ -38,6 +38,8 @@ public class Client extends Thread {
                 JsonNode request = mapper.readTree(line);
                 parseJson(request);
             }
+            closeConnection();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,17 +91,36 @@ public class Client extends Thread {
                 moves is a list with moves made by client sending MOVE_CHECKER request,
                 the list will be checked to determine if all moves were allowed
                  */
-                ArrayList<MoveInfo> moves = null;
-                try {
-                    //deserialize Json ArrayNode with MoveInfo objects
-                    moves = mapper.readValue(node.get("Moves").toString(), new TypeReference<ArrayList<MoveInfo>>() {});
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (Server.getGame(gameID).isActive()) {
+                    ArrayList<MoveInfo> moves = null;
+                    try {
+                        //deserialize Json ArrayNode with MoveInfo objects
+                        moves = mapper.readValue(node.get("Moves").toString(), new TypeReference<ArrayList<MoveInfo>>() {
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(Server.getGame(gameID).checkIfValidMove(moves)) {
+                        this.communication.moveChecker(gameID, this, moves);
+                        ServerCommunication.newTurn(gameID);
+                    }
                 }
-                this.communication.moveChecker(gameID, this, moves);
-                ServerCommunication.newTurn(gameID);
 
         }
+
+    }
+    private void closeConnection() {
+        try {
+            this.in.close();
+            this.out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Lobby.getInstance().removePlayer(this);
+        Server.removeClient(this);
+        Server.interruptGame(this);
+
 
     }
 

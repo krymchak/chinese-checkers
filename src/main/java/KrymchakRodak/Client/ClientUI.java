@@ -18,9 +18,10 @@ public class ClientUI extends Thread {
     private JPanel loginPanel = null;
     private JPanel lobbyPanel = null;
     private JPanel waitPanel = null;
+    private JPanel gamePanel = null;
     private JTextField loginTextField = null;
     private JTextArea lobbyUsers = null;
-    private Label waitLabel = null;
+    private JLabel waitLabel = null;
     private JButton loginButton = null;
     private JButton joinButton = null;
     private JButton botButton = null;
@@ -76,6 +77,7 @@ public class ClientUI extends Thread {
 
         String[] lobbyStrings = {"2 Players", "3 Players", "4 Players", "6 Players"};
         this.lobbyList = new JComboBox<>(lobbyStrings);
+        this.lobbyList.setEditable(false);
 
         this.joinButton = new JButton("Play Online");
         this.botButton = new JButton("Play vs. AI");
@@ -83,12 +85,14 @@ public class ClientUI extends Thread {
         this.lobbyPanel = new JPanel();
         this.lobbyPanel.setLayout(new GridBagLayout());
 
-        this.gbc.gridx = 1;
+        this.gbc.gridx = 0;
         this.gbc.gridy = 0;
+        this.gbc.gridwidth = 2;
         this.lobbyPanel.add(this.lobbyList, gbc);
 
         this.gbc.gridx = 0;
         this.gbc.gridy = 1;
+        this.gbc.gridwidth = 1;
         this.lobbyPanel.add(this.joinButton, gbc);
 
         this.gbc.gridx = 1;
@@ -96,10 +100,12 @@ public class ClientUI extends Thread {
         this.lobbyPanel.add(this.botButton, gbc);
         this.panelCards.add(this.lobbyPanel, "LOBBY");
 
-        this.waitLabel = new Label("Waiting for other players...");
+        this.waitLabel = new JLabel("<html>Waiting for other players...<br>Players connected:</html>", SwingConstants.CENTER);
 
         this.lobbyUsers = new JTextArea();
         this.lobbyUsers.setRows(6);
+        this.lobbyUsers.setColumns(15);
+        this.lobbyUsers.setEditable(false);
 
         this.waitPanel = new JPanel(new GridBagLayout());
 
@@ -112,6 +118,14 @@ public class ClientUI extends Thread {
         this.waitPanel.add(this.lobbyUsers, gbc);
 
         this.panelCards.add(this.waitPanel, "WAIT");
+
+        this.gamePanel = new JPanel(new GridBagLayout());
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        this.gamePanel.add(new JLabel("Game in progress..."), gbc);
+
+        this.panelCards.add(this.gamePanel, "GAME");
 
         this.cardLayout = (CardLayout) this.panelCards.getLayout();
         this.clientFrame.setLayout(this.cardLayout);
@@ -168,14 +182,6 @@ public class ClientUI extends Thread {
         this.cardLayout.show(panelCards, panelString);
     }
 
-    /*
-    add new String with username to lobbyUsers while waiting for game to start
-     */
-    void updatePlayerList(String username) {
-        this.lobbyUsers.append(username + "\n");
-
-        this.panelCards.updateUI();
-    }
 
     /*
     load waitPanel after successfully joining lobby
@@ -192,6 +198,8 @@ public class ClientUI extends Thread {
     put usernames of players waiting in lobby into lobbyUsers JTextArea
      */
     private void setLobbyUsers(ArrayList<String> names) {
+        this.lobbyUsers.setText("");
+
         for (String username : names) {
             this.lobbyUsers.append(username + "\n");
         }
@@ -220,9 +228,10 @@ public class ClientUI extends Thread {
                     new Thread(() ->
                             this.requestHandler.requestMoveChecker(this.graphicBoard.getMoves())).start();
 
+                    this.graphicBoard.unmarkActive();
                     this.graphicBoard.cancelMoveButton.setEnabled(false);
                     this.graphicBoard.endMoveButton.setEnabled(false);
-                    this.graphicBoard.unmarkActive();
+                    this.graphicBoard.setActiveTurn(false);
                 });
 
         this.graphicBoard.cancelMoveButton.addActionListener(al ->
@@ -232,7 +241,6 @@ public class ClientUI extends Thread {
 
     private void addBotBoardListeners() {
         this.graphicBoard.endMoveButton.addActionListener(al -> {
-            System.out.println(((Board) this.graphicBoard.getBoard()).write());
             new Thread(() -> {
                 this.graphicBoard.cancelMoveButton.setEnabled(false);
                 this.graphicBoard.endMoveButton.setEnabled(false);
@@ -240,8 +248,11 @@ public class ClientUI extends Thread {
 
                 botsMove();
             }).start();
-
-
+            /*try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
         });
 
         this.graphicBoard.cancelMoveButton.addActionListener(al ->
@@ -252,7 +263,6 @@ public class ClientUI extends Thread {
         for (Bot bot : this.bots) {
             startNewTurn();
             bot.moveBot();
-            System.out.println(((Board) this.graphicBoard.getBoard()).write());
         }
         startNewTurn();
     }
@@ -270,9 +280,16 @@ public class ClientUI extends Thread {
     allow player to move again
      */
     void startNewTurn() {
-        this.graphicBoard.newTurn();
+
         this.graphicBoard.cancelMoveButton.setEnabled(true);
         this.graphicBoard.endMoveButton.setEnabled(true);
+        this.graphicBoard.newTurn();
+
+    }
+
+    void endGame() {
+        gameFrame.setVisible(false);
+        changePanel("LOBBY");
     }
 
     void createBotGame(int gameSize, ArrayList<String> checkerColor) {

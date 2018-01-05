@@ -24,8 +24,24 @@ public class Server {
             clients.add(newClient);
         }
 
-
     }
+    static void removeClient(Client client) {
+        if (clients.contains(client)) {
+            clients.remove(client);
+        }
+        if (usernames.contains(client.getUsername())) {
+            usernames.remove(client.getUsername());
+        }
+    }
+
+    static void interruptGame(Client client) {
+        for (ServerGameData game : games) {
+            if (game.getPlayers().contains(client)) {
+                ServerCommunication.interruptGame(game.getPlayers());
+            }
+        }
+    }
+
     static ServerGameData getGame(int gameID) {
         for (ServerGameData gameData : games) {
             if (gameData.getGameID() == gameID) {

@@ -148,8 +148,9 @@ public class GraphicBoard extends JPanel
                                         board.getField(i, j).setActive(true);
                                         aktiveI = i;
                                         aktiveJ = j;
+                                        /*
                                         System.out.println(i);
-                                        System.out.println(j);
+                                        System.out.println(j);*/
                                         isFirstPressed = false;
                                     }
                                 }
@@ -162,6 +163,9 @@ public class GraphicBoard extends JPanel
                             for (int j = 0; j < board.getSize(); j++) {
                                 if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).isActive()) {
                                     board.getField(i, j).setActive(false);
+                                    if (moves.size() == 0) {
+                                        isFirstPressed = true;
+                                    }
                                 } else if (board.getField(i, j).IsNotEmpty() && board.getField(i, j).getCircle().isHit(x, y)) {
                                     try {
                                         board.Step(aktiveI, aktiveJ, i, j);
@@ -201,23 +205,33 @@ public class GraphicBoard extends JPanel
     }
 
     public void cancelMove() {
-        int stepNumber = this.moves.size() - 1;
+        if (this.moves.size() > 0) {
+            int stepNumber = this.moves.size() - 1;
 
-        if (stepNumber>= 0 && board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).isActive()) {
-            board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).setActive(false);
-        }
+            if (stepNumber >= 0 && board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).isActive()) {
+                board.getField(moves.get(stepNumber).getNewI(), moves.get(stepNumber).getNewJ()).setActive(false);
+            }
 
-        for(; stepNumber >= 0; stepNumber--) {
-            board.endMove();
-            MoveInfo move = this.moves.get(stepNumber);
-            try {
-                board.Step(move.getNewI(), move.getNewJ(), move.getOldI(), move.getOldJ());
-            } catch (Exception e) {
-                e.printStackTrace();
+            for (; stepNumber >= 0; stepNumber--) {
+                board.endMove();
+                MoveInfo move = this.moves.get(stepNumber);
+                try {
+                    board.Step(move.getNewI(), move.getNewJ(), move.getOldI(), move.getOldJ());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            this.moves.clear();
+        } else {
+            for (int i = 0; i < 17; i++) {
+                for (int j = 0; j < 17; j++) {
+                    if (board.getField(i, j).isChecker() && board.getField(i, j).isActive()) {
+                        board.getField(i, j).setActive(false);
+                    }
+                }
             }
         }
-
-        this.moves.clear();
         board.endMove();
         isFirstPressed=true;
         repaint();

@@ -24,18 +24,19 @@ class GameLobby {
      * @param player player to be added to list of players waiting in lobby
      */
    void addPlayer(Client player) {
-       if (getPlayerCount() > 0) {
-           ServerCommunication.updateLobby(getPlayers(), player.getUsername());
-       }
-
        this.players.add(player);
 
-       ServerCommunication.joinLobby(player, getUsernames());
+       ServerCommunication.updateLobby(getPlayers(), getUsernames());
 
-        if (enoughPlayers()) {
-            ServerCommunication.startGame(getPlayers(), getLobbyID());
-            resetLobby();
-        }
+       if (enoughPlayers()) {
+           ServerCommunication.startGame(getPlayers(), getLobbyID());
+           resetLobby();
+       }
+    }
+
+    void removePlayer(Client player) {
+       this.players.remove(player);
+       ServerCommunication.updateLobby(getPlayers(), getUsernames());
     }
 
     private int getPlayerCount() {
@@ -64,7 +65,7 @@ class GameLobby {
         return names;
     }
 
-    private LinkedList<Client> getPlayers() {
+    LinkedList<Client> getPlayers() {
         return players;
     }
 }

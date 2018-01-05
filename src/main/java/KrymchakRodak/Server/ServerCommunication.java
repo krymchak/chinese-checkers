@@ -34,27 +34,17 @@ class ServerCommunication {
     }
 
     //let connected users know how many people are in lobby
-    static void updateLobby(LinkedList<Client> players, String name) {
+    static void updateLobby(LinkedList<Client> players, ArrayList<String> names) {
         ObjectNode jsonNode = mapper.createObjectNode();
 
         jsonNode.put("Response", "UPDATE_LOBBY");
-        jsonNode.put("NewUser", name);
-
-        players.forEach(p ->
-            p.sendMessage(jsonNode.toString())
-        );
-    }
-
-    static void joinLobby(Client client, ArrayList<String> names) {
-        ObjectNode jsonNode = mapper.createObjectNode();
-
-        jsonNode.put("Response", "JOIN_SUCCESS");
-
         ArrayNode usersArray = mapper.valueToTree(names);
 
         jsonNode.putArray("Users").addAll(usersArray);
 
-        client.sendMessage(jsonNode.toString());
+        players.forEach(p ->
+            p.sendMessage(jsonNode.toString())
+        );
     }
 
     //start game
@@ -136,5 +126,14 @@ class ServerCommunication {
         jsonNode.put("Response", "TURN_ACTIVE");
 
         Server.getGame(gameID).getPlayerToNotify().sendMessage(jsonNode.toString());
+    }
+
+    static void interruptGame(LinkedList<Client> players) {
+        ObjectNode jsonNode = mapper.createObjectNode();
+
+        jsonNode.put("Response", "GAME_INTERRUPTED");
+
+        players.forEach(p -> p.sendMessage(jsonNode.toString()));
+
     }
 }

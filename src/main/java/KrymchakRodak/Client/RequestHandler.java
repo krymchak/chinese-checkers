@@ -36,8 +36,12 @@ class RequestHandler {
             setConnection();
         }
         if (this.connection != null) {
-            this.connection.login(username);
-            parseLoginResponse(this.connection.waitForResponse());
+            if (username.length() > 20) {
+                this.clientUI.addErrorLabel("Maximum username length is 20");
+            } else {
+                this.connection.login(username);
+                parseLoginResponse(this.connection.waitForResponse());
+            }
         }
     }
 
@@ -61,8 +65,7 @@ class RequestHandler {
     private void parseJoinLobbyResponse(JsonNode response) {
         if(response.get("Response").asText().equals("WRONG_LOBBY")) {
             this.clientUI.addErrorLabel("");
-        } else if (response.get("Response").asText().equals("JOIN_SUCCESS")) {
-
+        } else if (response.get("Response").asText().equals("UPDATE_LOBBY")) {
             try {
 
                 ArrayList<String> names = this.connection.getMapper().
@@ -72,12 +75,6 @@ class RequestHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            parseJoinLobbyResponse(this.connection.waitForResponse());
-
-        } else if (response.get("Response").asText().equals("UPDATE_LOBBY")) {
-
-            this.clientUI.updatePlayerList(response.get("NewUser").asText());
 
             parseJoinLobbyResponse(this.connection.waitForResponse());
 
@@ -91,6 +88,7 @@ class RequestHandler {
     private void startGame(JsonNode node) {
         this.gameData = new ClientGameData(node);
 
+        this.clientUI.changePanel("GAME");
         this.clientUI.createGameFrame(this.gameData.getBoard());
 
         if (!this.gameData.getBoard().isActiveTurn()) {
@@ -114,6 +112,8 @@ class RequestHandler {
         } else if (node.get("Response").asText().equals("TURN_ACTIVE")) {
             clientUI.startNewTurn();
 
+        } else if (node.get("Response").asText().equals("GAME_INTERRUPTED")) {
+            clientUI.endGame();
         }
     }
 

@@ -45,4 +45,12 @@ class Lobby {
             }
         });
     }
+
+    void removePlayer(Client client) {
+        for (GameLobby lobby : this.lobbies) {
+            if (lobby.getPlayers().contains(client)) {
+                lobby.removePlayer(client);
+            }
+        }
+    }
 }
