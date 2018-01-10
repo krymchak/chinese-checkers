@@ -37,6 +37,7 @@ public class Server {
     static void interruptGame(Client client) {
         for (ServerGameData game : games) {
             if (game.getPlayers().contains(client)) {
+                game.getPlayers().remove(client);
                 ServerCommunication.interruptGame(game.getPlayers());
             }
         }

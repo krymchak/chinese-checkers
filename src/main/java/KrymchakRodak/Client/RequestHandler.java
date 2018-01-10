@@ -4,14 +4,18 @@ import KrymchakRodak.Board.MoveInfo;
 import KrymchakRodak.Game.ClientGameData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 class RequestHandler {
     private ClientConnection connection = null;
     private ClientUI clientUI = null;
     private ClientGameData gameData = null;
+    private CustomLobby lobby = null;
 
     RequestHandler(ClientUI clientUI) {
         this.clientUI = clientUI;
@@ -143,38 +147,99 @@ class RequestHandler {
         this.clientUI.updateGraphicBoard(moves);
     }
 
-    void startBotGame(int selectedID) {
-        ArrayList<String> checkerColor = new ArrayList<>();
+    void requestCustomLobbiesList() {
+        this.connection.getCustomLobbies();
+        prepareCustomLobbiesPanel(this.connection.waitForResponse());
+    }
 
-        switch (selectedID) {
-            case 0:
-                checkerColor.add("ORANGE");
-                checkerColor.add("GREEN");
-                this.clientUI.createBotGame(2, checkerColor);
-                break;
-            case 1:
-                checkerColor.add("RED");
-                checkerColor.add("GREEN");
-                checkerColor.add("BLUE");
-                this.clientUI.createBotGame(3, checkerColor);
-                break;
-            case 2:
-                checkerColor.add("RED");
-                checkerColor.add("BLUE");
-                checkerColor.add("GREEN");
-                checkerColor.add("ORANGE");
-                this.clientUI.createBotGame(4, checkerColor);
-                break;
-            case 3:
-                checkerColor.add("ORANGE");
-                checkerColor.add("RED");
-                checkerColor.add("BLUE");
-                checkerColor.add("GREEN");
-                checkerColor.add("CYAN");
-                checkerColor.add("PINK");
-                this.clientUI.createBotGame(6, checkerColor);
-                break;
+    void leaveLobby() {
+        connection.leaveLobby();
+        requestCustomLobbiesList();
+        this.clientUI.changePanel("LIST");
+    }
+
+    private void prepareCustomLobbiesPanel(JsonNode node) {
+        Map<Integer, String> map = new HashMap<>();
+        if (node.get("MapSize").asInt() > 0) {
+            map = deserializeMap(node.get("Map").asText());
         }
 
+        this.lobby = new CustomLobby(map, this.clientUI, this);
+        this.clientUI.prepareCustomLobbyPanels(this.lobby);
+    }
+
+    Map<Integer, String> requestUpdateList() {
+        this.connection.getUpdatedLobbyList();
+
+        return deserializeMap(this.connection.waitForResponse().get("Map").asText());
+    }
+
+    private Map<Integer, String> deserializeMap(String jsonString) {
+        Map<Integer, String> map = new HashMap<>();
+        try {
+            map = connection.getMapper().readValue(jsonString, TypeFactory.defaultInstance()
+                    .constructMapType(HashMap.class, Integer.class, String.class));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    void requestCreateLobby(int gameSize, String name, CustomLobby lobby) {
+        connection.createCustomLobby(gameSize, name);
+        JsonNode node = connection.waitForResponse();
+        if (node.get("Response").asText().equals("SUCCESS")) {
+            connection.setLobbyID(node.get("LobbyID").asInt());
+            this.clientUI.changePanel("ROOM");
+            this.lobby.unlockButtons();
+            this.lobby.updatePlayers(deserializeArrayList(node.get("Players").toString()));
+            updateCustomLobby(connection.waitForResponse());
+        }
+    }
+
+    void removePlayerFromLobby(String name) {
+        connection.removePlayerFromLobby(name);
+    }
+
+    private ArrayList<String> deserializeArrayList(String jsonString) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        try {
+            arrayList = this.connection.getMapper().
+                    readValue(jsonString, new TypeReference<ArrayList<String>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return arrayList;
+    }
+
+    void requestJoinCustomLobby(int lobbyID) {
+        connection.joinCustomLobby(lobbyID);
+        updateCustomLobby(connection.waitForResponse());
+    }
+
+    private void updateCustomLobby(JsonNode node) {
+        if (node.get("Response").asText().equals("UPDATE_LOBBY")) {
+            this.clientUI.changePanel("ROOM");
+            lobby.updatePlayers(deserializeArrayList(node.get("Users").toString()));
+
+            updateCustomLobby(connection.waitForResponse());
+        } else if (node.get("Response").asText().equals("GAME_READY")) {
+            startGame(node);
+        } else if (node.get("Response").asText().equals("LOBBY_DISBANDED")) {
+
+        } else if (node.get("Response").asText().equals("KICKED")) {
+            this.clientUI.changePanel("LIST");
+        }
+
+    }
+
+    void addBot() {
+        connection.addBot();
+    }
+
+    void requestStartGame(int gameSize) {
+        this.connection.startGame(gameSize);
     }
 }

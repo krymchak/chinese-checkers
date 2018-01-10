@@ -9,7 +9,7 @@ import java.util.LinkedList;
  */
 
 class GameLobby {
-    private int numberOfPlayers;
+    int numberOfPlayers;
     private LinkedList<Client> players;
     private int lobbyID;
 
@@ -18,6 +18,7 @@ class GameLobby {
         this.players = new LinkedList<>();
         this.lobbyID = lobbyID;
     }
+
 
     /**
      * add player, if lobby is ready to start game notify all players to start game
@@ -29,7 +30,7 @@ class GameLobby {
        ServerCommunication.updateLobby(getPlayers(), getUsernames());
 
        if (enoughPlayers()) {
-           ServerCommunication.startGame(getPlayers(), getLobbyID());
+           ServerCommunication.startGame(getPlayers(), numberOfPlayers);
            resetLobby();
        }
     }
@@ -51,7 +52,7 @@ class GameLobby {
         this.players.clear();
     }
 
-    private boolean enoughPlayers() {
+    boolean enoughPlayers() {
         return (this.numberOfPlayers == getPlayerCount());
     }
 

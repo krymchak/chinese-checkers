@@ -16,6 +16,7 @@ class ClientConnection {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
+    private int lobbyID = 0;
 
     /*
     connect to the server and set InputStream and OutputStream
@@ -55,7 +56,16 @@ class ClientConnection {
         out.println(node.toString());
         out.flush();
     }
+    void removePlayerFromLobby(String name) {
+        ObjectNode node = mapper.createObjectNode();
 
+        node.put("RequestType", "REMOVE_PLAYER");
+        node.put("Username", name);
+        node.put("LobbyID", getLobbyID());
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }
     /*
     attempt to join lobby with specified ID
      */
@@ -69,15 +79,7 @@ class ClientConnection {
         this.out.flush();
     }
 
-    /*void createBotGame(int lobbyID) {
-        ObjectNode node = mapper.createObjectNode();
 
-        node.put("RequestType", "START_BOT");
-        node.put("LobbyID", lobbyID);
-
-        this.out.println(node.toString());
-        this.out.flush();
-    }*/
 
     /*
     wait for message from server and create JsonNode from received String
@@ -96,31 +98,85 @@ class ClientConnection {
         return null;
     }
 
-    /*void closeConnection() throws IOException {
-        socket.close();
-        in.close();
-        out.close();
-    }
-    ArrayList<MoveInfo> waitForTurn() {
-        JsonNode node = waitForResponse();
-        System.out.println(node.toString());
-        ArrayList<MoveInfo> moves = null;
-        try {
-            moves = mapper.readValue(node.get("Moves").toString(), new TypeReference<ArrayList<MoveInfo>>() {});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void getCustomLobbies() {
+        ObjectNode node = mapper.createObjectNode();
 
-        return moves;
+        node.put("RequestType", "CUSTOM_LOBBIES");
+
+        this.out.println(node.toString());
+        this.out.flush();
     }
 
-    void setUsername(String username) {
-        this.username = username;
+    void createCustomLobby(int gameSize, String name) {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "CREATE_LOBBY");
+        node.put("GameSize", gameSize);
+        node.put("LobbyName", name);
+
+        this.out.println(node.toString());
+        this.out.flush();
     }
 
-    String getUsername() {
-        return this.username;
-    }*/
+    void getUpdatedLobbyList() {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "UPDATE_LOBBIES");
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }
+
+    int getLobbyID() {
+        return this.lobbyID;
+    }
+
+    void setLobbyID(int lobbyID) {
+        this.lobbyID = lobbyID;
+    }
+
+    void joinCustomLobby(int lobbyID) {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "JOIN_CUSTOM");
+        node.put("LobbyID", lobbyID);
+        this.lobbyID = lobbyID;
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }
+
+    void addBot() {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "ADD_BOT");
+        node.put("LobbyID", getLobbyID());
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }
+
+    void startGame(int gameSize) {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "START_GAME");
+        node.put("LobbyID", getLobbyID());
+        node.put("GameSize", gameSize);
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }
+
+    void leaveLobby() {
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("RequestType", "LEAVE_LOBBY");
+        node.put("LobbyID", getLobbyID());
+
+        this.out.println(node.toString());
+        this.out.flush();
+    }
+
 
     ObjectMapper getMapper() {
         return this.mapper;

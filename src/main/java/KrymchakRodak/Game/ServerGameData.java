@@ -3,6 +3,7 @@ package KrymchakRodak.Game;
 import KrymchakRodak.Board.Board;
 import KrymchakRodak.Board.CreatorBoard;
 import KrymchakRodak.Board.MoveInfo;
+import KrymchakRodak.Server.BotPlayer;
 import KrymchakRodak.Server.Client;
 
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ public class ServerGameData {
         }
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     public boolean checkIfValidMove(ArrayList<MoveInfo> moves) {
         for (MoveInfo move : moves) {
                 try {
@@ -38,7 +43,16 @@ public class ServerGameData {
                 }
         }
         board.endMove();
+        updateBotBoards();
         return true;
+    }
+
+    private void updateBotBoards() {
+        for(Client player : players) {
+            if (player instanceof BotPlayer) {
+                ((BotPlayer) player).setBoard(getBoard());
+            }
+        }
     }
 
     public int getGameID() {
@@ -54,8 +68,9 @@ public class ServerGameData {
     }
 
     private int getActivePlayer() {
+        System.out.println(activePlayer);
         this.activePlayer = ++this.activePlayer % this.players.size();
-
+        System.out.println(activePlayer);
         return this.activePlayer;
     }
 

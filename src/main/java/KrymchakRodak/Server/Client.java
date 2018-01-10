@@ -21,12 +21,13 @@ public class Client extends Thread {
     private PrintWriter out;
     private Socket client;
     private String username;
-    private ServerCommunication communication;
+    private int lobbyID = 0;
 
     Client(Socket clientSocket) {
         this.client = clientSocket;
-        this.communication = new ServerCommunication();
     }
+
+    Client() {}
 
     @Override
     public void run() {
@@ -69,7 +70,7 @@ public class Client extends Thread {
                     ServerCommunication.badLogin(this);
                 } else {
                     Server.usernames.add(username);
-                    this.username = username;
+                    setUsername(username);
                     //notify client about login success
                     ServerCommunication.loginSuccess(this);
                 }
@@ -101,11 +102,60 @@ public class Client extends Thread {
                         e.printStackTrace();
                     }
                     if(Server.getGame(gameID).checkIfValidMove(moves)) {
-                        this.communication.moveChecker(gameID, this, moves);
+                        ServerCommunication.moveChecker(gameID, this, moves);
                         ServerCommunication.newTurn(gameID);
                     }
                 }
+                break;
 
+            case "CUSTOM_LOBBIES":
+                ServerCommunication.sendCustomLobbiesList(this);
+                break;
+
+            case "CREATE_LOBBY":
+                int gameSize = node.get("GameSize").asInt();
+                String name = node.get("LobbyName").toString();
+
+                this.lobbyID = Lobby.getInstance().addCustomLobby(gameSize, name, this);
+                ServerCommunication.notifyLobbyCreated(this, this.lobbyID);
+                break;
+
+            case "UPDATE_LOBBIES":
+                ServerCommunication.sendCustomLobbiesList(this);
+                break;
+
+            case "JOIN_CUSTOM":
+                this.lobbyID = node.get("LobbyID").asInt();
+                Lobby.getInstance().getByID(this.lobbyID).addPlayer(this);
+                break;
+
+            case "ADD_BOT":
+                Lobby.getInstance().getByID(this.lobbyID).addBot();
+                break;
+
+            case "START_GAME":
+                int id = node.get("LobbyID").asInt();
+                int size = node.get("GameSize").asInt();
+                try {
+                    ServerCommunication.startCustomGame(this.lobbyID, Lobby.getInstance().getByID(id).getPlayers(), size);
+                } finally {
+                    Lobby.getInstance().removeLobby(id);
+                }
+                break;
+
+            case "LEAVE_LOBBY":
+                int lobby = node.get("LobbyID").asInt();
+                ServerCommunication.lobbyDisbanded(this);
+                Lobby.getInstance().getByID(lobby).removePlayer(this.getUsername());
+                break;
+
+            case "REMOVE_PLAYER":
+                String user = node.get("Username").asText();
+                if (!(user.equals(getUsername()))) {
+                    int lobbyId = node.get("LobbyID").asInt();
+                    Lobby.getInstance().getByID(lobbyId).removePlayer(user);
+                }
+                break;
         }
 
     }
@@ -135,5 +185,8 @@ public class Client extends Thread {
 
     String getUsername() {
         return this.username;
+    }
+    void setUsername(String name) {
+        this.username = name;
     }
 }

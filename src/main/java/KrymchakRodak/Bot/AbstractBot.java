@@ -5,11 +5,15 @@
  */
 package KrymchakRodak.Bot;
 
+import KrymchakRodak.Board.MoveInfo;
+
+import java.util.ArrayList;
+
 /**
  *
  * @author krmwe
  */
 public abstract class AbstractBot {
-    public abstract void moveBot();
+    public abstract ArrayList<MoveInfo> moveBot();
     
 }

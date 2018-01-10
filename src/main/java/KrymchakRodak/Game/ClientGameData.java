@@ -42,7 +42,7 @@ public class ClientGameData {
     }
 
     public ClientGameData(JsonNode node) {
-
+        System.out.println(node.toString());
         int numberOfPlayers = node.get("GameSize").asInt();
         boolean firstTurn = node.get("FirstTurn").asBoolean();
 

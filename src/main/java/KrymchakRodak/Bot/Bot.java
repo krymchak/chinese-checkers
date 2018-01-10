@@ -5,13 +5,8 @@
  */
 package KrymchakRodak.Bot;
 
-import KrymchakRodak.Board.AbstractBoard;
-import KrymchakRodak.Board.Board;
-import KrymchakRodak.Board.Field;
-import KrymchakRodak.Board.ImpossibleStep;
-import KrymchakRodak.Board.IsNotChecker;
-import KrymchakRodak.Board.Neighbors;
-import KrymchakRodak.Board.WrongNumberOfPlayers;
+import KrymchakRodak.Board.*;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
@@ -54,7 +49,7 @@ public class Bot extends AbstractBot
         {
             for (int j=0; j<17; j++)
             {
-                if (board.getField(i,j).isChecker() && board.getField(i,j).getTriangle()==endTriangle)
+                if (board.getField(i,j).getTriangle()==endTriangle)
                 {
                     listOfEndField.add(new FieldForBot(i,j));
                 }
@@ -66,6 +61,14 @@ public class Bot extends AbstractBot
     {
         return Math.sqrt((i1-i2)*(i1-i2) + (j1-j2)*(j1-j2));
     }
+
+    public Board getBoard() {
+        return ((Board) this.board);
+    }
+
+    public void setBoard(AbstractBoard board) {
+        this.board = board;
+    }
     
     public MaxDistance maxDistance()
     {
@@ -75,15 +78,16 @@ public class Bot extends AbstractBot
        ArrayList <Neighbors> listOfNeighbors=new ArrayList<>();
        while (listOfNeighbors.isEmpty())
         {
-            //j = random.nextInt(listOfCheckers.size());
+            j = random.nextInt(listOfCheckers.size());
             
             //System.out.println(j);
-            j=1;
-            System.out.println("Фишка:");
-            System.out.println(listOfCheckers.get(j).getI());
-            System.out.println(listOfCheckers.get(j).getJ());
-            //listOfNeighbors = board.createListOfNeighbors(listOfCheckers.get(j).getI(), listOfCheckers.get(j).getJ());
-            listOfNeighbors = board.createListOfNeighbors(13, 10);
+            //
+            //j=1;
+            //System.out.println("пїЅпїЅпїЅпїЅпїЅ:");
+            //System.out.println(listOfCheckers.get(j).getI());
+            //System.out.println(listOfCheckers.get(j).getJ());
+            listOfNeighbors = board.createListOfNeighbors(listOfCheckers.get(j).getI(), listOfCheckers.get(j).getJ());
+            //listOfNeighbors = board.createListOfNeighbors(13, 10);
 
             for (int k=0; k<listOfNeighbors.size(); k++)
             {
@@ -104,14 +108,19 @@ public class Bot extends AbstractBot
     }
     
     
-    public void moveBot()
+    public ArrayList<MoveInfo> moveBot()
     {
+        ArrayList<MoveInfo> moves = new ArrayList<>();
         if (!board.win(color))
         {
             MaxDistance maxDistance = maxDistance();
             try 
             {
-                board.Step(maxDistance.getChecker().getI(), maxDistance.getChecker().getJ(), maxDistance.getNeighbors().getI(), maxDistance.getNeighbors().getJ());
+                moves.add(new MoveInfo(maxDistance.getChecker().getI(), maxDistance.getChecker().getJ(),
+                        maxDistance.getNeighbors().getI(), maxDistance.getNeighbors().getJ()));
+
+                board.Step(maxDistance.getChecker().getI(), maxDistance.getChecker().getJ(),
+                        maxDistance.getNeighbors().getI(), maxDistance.getNeighbors().getJ());
                 listOfCheckers.remove(maxDistance.getChecker());
                 listOfCheckers.add(new FieldForBot(maxDistance.getNeighbors().getI(), maxDistance.getNeighbors().getJ()));
                 listOfEndField.remove(new FieldForBot(maxDistance.getNeighbors().getI(), maxDistance.getNeighbors().getJ())); 
@@ -122,6 +131,7 @@ public class Bot extends AbstractBot
             {
             }
         }
+        return moves;
     }
     
 }

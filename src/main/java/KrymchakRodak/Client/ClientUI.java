@@ -24,10 +24,10 @@ public class ClientUI extends Thread {
     private JLabel waitLabel = null;
     private JButton loginButton = null;
     private JButton joinButton = null;
-    private JButton botButton = null;
+    private JButton customLobbyButton = null;
     private JComboBox<String> lobbyList = null;
     private CardLayout cardLayout = null;
-    private ArrayList<Bot> bots = null;
+    private CustomLobby customLobby = null;
 
     /*
     Default constructor, creates new RequestHandler instance
@@ -67,6 +67,7 @@ public class ClientUI extends Thread {
 
         this.gbc.gridx = 0;
         this.gbc.gridy = 0;
+        this.gbc.insets = new Insets(10, 10, 10, 10);
         this.loginPanel.add(this.loginTextField, gbc);
 
         this.gbc.gridx = 0;
@@ -80,11 +81,12 @@ public class ClientUI extends Thread {
         this.lobbyList.setEditable(false);
 
         this.joinButton = new JButton("Play Online");
-        this.botButton = new JButton("Play vs. AI");
+        this.customLobbyButton = new JButton("Custom Game");
 
         this.lobbyPanel = new JPanel();
         this.lobbyPanel.setLayout(new GridBagLayout());
 
+        this.gbc.fill = GridBagConstraints.BOTH;
         this.gbc.gridx = 0;
         this.gbc.gridy = 0;
         this.gbc.gridwidth = 2;
@@ -95,9 +97,10 @@ public class ClientUI extends Thread {
         this.gbc.gridwidth = 1;
         this.lobbyPanel.add(this.joinButton, gbc);
 
-        this.gbc.gridx = 1;
-        this.gbc.gridy = 1;
-        this.lobbyPanel.add(this.botButton, gbc);
+        this.gbc.gridx = 0;
+        this.gbc.gridy = 5;
+        this.gbc.insets = new Insets(50, 0, 0, 0);
+        this.lobbyPanel.add(this.customLobbyButton, gbc);
         this.panelCards.add(this.lobbyPanel, "LOBBY");
 
         this.waitLabel = new JLabel("<html>Waiting for other players...<br>Players connected:</html>", SwingConstants.CENTER);
@@ -111,6 +114,7 @@ public class ClientUI extends Thread {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.insets = new Insets(0,0,0,0);
         this.waitPanel.add(this.waitLabel, gbc);
 
         gbc.gridx = 0;
@@ -153,10 +157,10 @@ public class ClientUI extends Thread {
            ).start()
        );
 
-       this.botButton.addActionListener(t ->
+       this.customLobbyButton.addActionListener(r ->
        new Thread(() ->
-        this.requestHandler.startBotGame(this.lobbyList.getSelectedIndex())
-           ).start());
+            this.requestHandler.requestCustomLobbiesList())
+               .start());
     }
 
     /*
@@ -180,6 +184,11 @@ public class ClientUI extends Thread {
      */
     void changePanel(String panelString) {
         this.cardLayout.show(panelCards, panelString);
+        this.panelCards.updateUI();
+    }
+
+    private void addPanel(String panelName, JPanel panel) {
+        this.panelCards.add(panel, panelName);
     }
 
 
@@ -239,34 +248,6 @@ public class ClientUI extends Thread {
 
     }
 
-    private void addBotBoardListeners() {
-        this.graphicBoard.endMoveButton.addActionListener(al -> {
-            new Thread(() -> {
-                this.graphicBoard.cancelMoveButton.setEnabled(false);
-                this.graphicBoard.endMoveButton.setEnabled(false);
-                this.graphicBoard.unmarkActive();
-
-                botsMove();
-            }).start();
-            /*try {
-                sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-        });
-
-        this.graphicBoard.cancelMoveButton.addActionListener(al ->
-                this.graphicBoard.cancelMove());
-    }
-
-    private void botsMove() {
-        for (Bot bot : this.bots) {
-            startNewTurn();
-            bot.moveBot();
-        }
-        startNewTurn();
-    }
-
     /*
     update GraphicBoard with new moves
      */
@@ -292,38 +273,13 @@ public class ClientUI extends Thread {
         changePanel("LOBBY");
     }
 
-    void createBotGame(int gameSize, ArrayList<String> checkerColor) {
+    void prepareCustomLobbyPanels(CustomLobby customLobby) {
+        this.customLobby = customLobby;
+        addPanel("LIST", customLobby.getListPanel());
+        addPanel("CREATE", customLobby.getCreatePanel());
+        addPanel("ROOM", customLobby.getRoomPanel());
+        changePanel("LIST");
 
-
-        Field field;
-        Color color;
-
-        bots = new ArrayList<>();
-
-        try {
-            field = Color.class.getField(checkerColor.get(0));
-            color = (Color) field.get(null);
-            this.graphicBoard = new GraphicBoard(new CreatorBoard().createBoard(gameSize), color);
-
-            for (int i = 1; i < gameSize; i++) {
-                field = Color.class.getField(checkerColor.get(i));
-                color = (Color) field.get(null);
-
-                bots.add(new Bot( this.graphicBoard.getBoard(), color));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        addBotBoardListeners();
-
-
-        this.gameFrame = new JFrame();
-
-        this.gameFrame.add(this.graphicBoard);
-        this.gameFrame.setSize(17*40,17*40);
-        this.gameFrame.setVisible(true);
-        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        startNewTurn();
     }
 
 }
