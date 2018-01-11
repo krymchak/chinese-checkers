@@ -173,7 +173,6 @@ class ServerCommunication {
         ObjectNode jsonNode = mapper.createObjectNode();
 
         jsonNode.put("Response", "GAME_INTERRUPTED");
-
         players.forEach(p -> p.sendMessage(jsonNode.toString()));
 
     }

@@ -25,4 +25,9 @@ public class BotPlayer extends Client {
         ServerCommunication.newTurn(gameID);
     }
 
+    @Override
+    void sendMessage(String jsonString) {
+
+    }
+
 }

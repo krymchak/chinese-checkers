@@ -228,7 +228,7 @@ class RequestHandler {
         } else if (node.get("Response").asText().equals("GAME_READY")) {
             startGame(node);
         } else if (node.get("Response").asText().equals("LOBBY_DISBANDED")) {
-
+            this.clientUI.changePanel("LIST");
         } else if (node.get("Response").asText().equals("KICKED")) {
             this.clientUI.changePanel("LIST");
         }

@@ -145,7 +145,6 @@ public class Client extends Thread {
 
             case "LEAVE_LOBBY":
                 int lobby = node.get("LobbyID").asInt();
-                ServerCommunication.lobbyDisbanded(this);
                 Lobby.getInstance().getByID(lobby).removePlayer(this.getUsername());
                 break;
 

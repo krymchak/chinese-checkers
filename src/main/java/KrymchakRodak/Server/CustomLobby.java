@@ -43,23 +43,27 @@ class CustomLobby extends GameLobby {
 
     void removePlayer(String name) {
         for (Client client : super.getPlayers()) {
-            if (client.getUsername().equals(name)) {
-                if (owner.getUsername().equals(name)) {
+            if (client.getUsername().equals(name) && client.getUsername().equals(owner.getUsername())) {
                  deleteLobby();
+                 break;
+            } else  if (client.getUsername().equals(name)){
+                getPlayers().remove(client);
+                if (client instanceof BotPlayer) {
+                    this.botCount--;
                 } else {
-                    getPlayers().remove(client);
-                    if (client instanceof BotPlayer) {
-                        this.botCount--;
-                    } else {
-                        ServerCommunication.removeFromLobby(client);
-                    }
-                    ServerCommunication.updateLobby(super.getPlayers(), getUsernames());
+                    ServerCommunication.removeFromLobby(client);
                 }
+                
+                ServerCommunication.updateLobby(super.getPlayers(), getUsernames());
             }
         }
     }
 
     private void deleteLobby() {
+        for (Client client : super.getPlayers()) {
+            if (!(client instanceof BotPlayer))
+            ServerCommunication.lobbyDisbanded(client);
+        }
         Lobby.getInstance().removeLobby(super.getLobbyID());
     }
 
